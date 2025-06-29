@@ -111,4 +111,23 @@ class UserController {
         header("Location: index.php?page=user");
         exit();
     }
+
+        public function resetPassword() {
+        $id = $_GET['id'];
+        // Mencegah admin mereset passwordnya sendiri lewat cara ini
+        if ($id == $_SESSION['id_user']) {
+            $_SESSION['error_message'] = "Anda tidak bisa mereset password Anda sendiri dari sini!";
+            header("Location: index.php?page=user");
+            exit();
+        }
+
+        if ($this->userModel->resetPassword($id)) {
+            $_SESSION['success_message'] = "Password user berhasil direset ke '123456'.";
+        } else {
+            $_SESSION['error_message'] = "Gagal mereset password user.";
+        }
+        
+        header("Location: index.php?page=user");
+        exit();
+    }
 }

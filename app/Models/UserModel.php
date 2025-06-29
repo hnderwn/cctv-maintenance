@@ -107,4 +107,20 @@ class UserModel {
         mysqli_stmt_bind_param($stmt, "i", $id);
         return mysqli_stmt_execute($stmt);
     }
+
+        /**
+     * Mereset password user ke password default.
+     * @param int $id ID user yang akan direset.
+     * @param string $defaultPassword Password default baru.
+     * @return bool
+     */
+    public function resetPassword($id, $defaultPassword = '123456') {
+        $new_password_hash = password_hash($defaultPassword, PASSWORD_BCRYPT);
+        
+        $sql = "UPDATE users SET password_hash = ? WHERE id_user = ?";
+        $stmt = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($stmt, "si", $new_password_hash, $id);
+        
+        return mysqli_stmt_execute($stmt);
+    }
 }

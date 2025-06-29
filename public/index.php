@@ -76,9 +76,15 @@ switch ($page) {
         else $c->delete();
         break;
         
-    case 'user': case 'user_create': case 'user_store': case 'user_edit': case 'user_update': case 'user_delete':
+    case 'user': case 'user_create': case 'user_store': case 'user_edit': case 'user_update': case 'user_delete': case 'user_reset_password': // <-- RUTE BARU
         require_once '../app/Controllers/UserController.php'; $c = new UserController($conn);
-        if ($page === 'user') $c->index(); elseif ($page === 'user_create') $c->create(); elseif ($page === 'user_store') $c->store(); elseif ($page === 'user_edit') $c->edit(); elseif ($page === 'user_update') $c->update(); else $c->delete();
+        if ($page === 'user') $c->index();
+        elseif ($page === 'user_create') $c->create();
+        elseif ($page === 'user_store') $c->store();
+        elseif ($page === 'user_edit') $c->edit();
+        elseif ($page === 'user_update') $c->update();
+        elseif ($page === 'user_reset_password') $c->resetPassword(); // <-- AKSI BARU
+        else $c->delete();
         break;
 
     // Rute untuk semua fitur Komponen Dipakai
