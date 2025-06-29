@@ -19,9 +19,12 @@
         </div>
     <?php endif; ?>
 
-    <div class="mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <a href="index.php?page=kerusakan_create" class="btn btn-danger">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>Tambah Laporan Kerusakan
+        </a>
+        <a href="index.php?page=export_kerusakan" class="btn btn-success">
+            <i class="bi bi-file-earmark-excel-fill me-2"></i>Export ke Excel
         </a>
     </div>
 

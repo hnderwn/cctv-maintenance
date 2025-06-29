@@ -13,11 +13,12 @@
         </div>
     <?php endif; ?>
 
-    <div class="mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <a href="index.php?page=maintenance_create" class="btn btn-primary">
-            <a href="index.php?page=maintenance_create" class="btn btn-primary">
-                <i class="bi bi-plus-circle me-2"></i>Tambah Laporan
-            </a>
+            <i class="bi bi-plus-circle me-2"></i>Tambah Laporan
+        </a>
+        <a href="index.php?page=export_maintenance" class="btn btn-success">
+            <i class="bi bi-file-earmark-excel-fill me-2"></i>Export ke Excel
         </a>
     </div>
 

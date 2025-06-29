@@ -4,6 +4,9 @@
 require_once '../app/Models/LogKerusakanModel.php';
 require_once '../app/Models/TeknisiModel.php';
 require_once '../app/Models/CctvUnitModel.php';
+use PhpOffice\PhpSpreadsheet\Worksheet\Table;
+use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 class KerusakanController {
     private $logKerusakanModel, $teknisiModel, $cctvUnitModel;
@@ -78,6 +81,65 @@ class KerusakanController {
             $_SESSION['error_message'] = "Gagal menghapus laporan.";
         }
         header("Location: index.php?page=laporan_kerusakan");
+        exit();
+    }
+
+        public function exportToExcel() {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        
+        $headers = ['ID Log', 'Tanggal', 'Jam', 'ID CCTV', 'Lokasi CCTV', 'ID Teknisi', 'Nama Teknisi', 'Deskripsi Kerusakan'];
+        $sheet->fromArray($headers, NULL, 'A1');
+
+        $data = $this->logKerusakanModel->getAll();
+        
+        // Looping manual (cara aman)
+        $rowNumber = 2;
+        foreach ($data as $row) {
+            $sheet->setCellValue('A' . $rowNumber, $row['id_log']);
+            $sheet->setCellValue('B' . $rowNumber, $row['tanggal']);
+            $sheet->setCellValue('C' . $rowNumber, $row['jam']);
+            $sheet->setCellValue('D' . $rowNumber, $row['id_cctv']);
+            $sheet->setCellValue('E' . $rowNumber, $row['cctv_lokasi']);
+            $sheet->setCellValue('F' . $rowNumber, $row['id_teknisi']);
+            $sheet->setCellValue('G' . $rowNumber, $row['nama_teknisi']);
+            $sheet->setCellValue('H' . $rowNumber, $row['deskripsi_kerusakan']);
+            $rowNumber++;
+        }
+
+        // --- STYLING SESUAI PREFERENSI LO ---
+        $lastColumn = $sheet->getHighestColumn();
+        $lastRow = $sheet->getHighestRow();
+
+        $headerStyle = [
+            'font' => ['bold' => true,],
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER,],
+        ];
+        $sheet->getStyle('A1:' . $lastColumn . '1')->applyFromArray($headerStyle);
+
+        $firstColumnStyle = ['font' => ['bold' => true,]];
+        $sheet->getStyle('A2:A' . $lastRow)->applyFromArray($firstColumnStyle);
+        // --- AKHIR STYLING ---
+
+        // --- FORMAT SEBAGAI TABEL ---
+        $tableRange = 'A1:' . $lastColumn . $lastRow;
+        $table = new Table($tableRange, 'LaporanKerusakanTable');
+        $tableStyle = new TableStyle();
+        $tableStyle->setTheme(TableStyle::TABLE_STYLE_MEDIUM9);
+        $tableStyle->setShowRowStripes(true);
+        $tableStyle->setShowFirstColumn(true);
+        $table->setStyle($tableStyle);
+        $sheet->addTable($table);
+        // --- AKHIR FORMAT TABEL ---
+
+        // Atur header HTTP untuk download
+        $filename = 'laporan-kerusakan-' . date('Y-m-d') . '.xlsx';
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
         exit();
     }
 }
