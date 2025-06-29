@@ -7,6 +7,8 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 require_once '../app/Models/LogMaintenanceModel.php';
 require_once '../app/Models/TeknisiModel.php';
 require_once '../app/Models/CctvUnitModel.php'; 
+use PhpOffice\PhpSpreadsheet\Worksheet\Table;     
+use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
 
 class MaintenanceController {
     private $logMaintenanceModel, $teknisiModel, $cctvUnitModel;
@@ -86,47 +88,51 @@ class MaintenanceController {
         exit();
     }
     
-    /**
-     * FUNGSI BARU: Untuk handle export data ke Excel
-     */
-        public function exportToExcel() {
-        // 1. Buat object spreadsheet baru
+    public function exportToExcel() {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         
-        // 2. Buat header untuk tabel di Excel
-        $sheet->setCellValue('A1', 'ID Log');
-        $sheet->setCellValue('B1', 'Tanggal');
-        $sheet->setCellValue('C1', 'Jam');
-        $sheet->setCellValue('D1', 'Lokasi CCTV');
-        $sheet->setCellValue('E1', 'Nama Teknisi');
-        $sheet->setCellValue('F1', 'Deskripsi');
+        // Buat header
+        $headers = ['ID Log', 'Tanggal', 'Jam', 'Lokasi CCTV', 'Nama Teknisi', 'Deskripsi'];
+        $sheet->fromArray($headers, NULL, 'A1');
 
-        // 3. Ambil data dari database
+        // Ambil data
         $data = $this->logMaintenanceModel->getAll();
+        // Masukkan data ke sheet mulai dari baris 2
+        $sheet->fromArray($data, NULL, 'A2');
 
-        // 4. Masukkan data ke dalam sheet Excel
-        $row = 2; // Mulai dari baris kedua
-        foreach ($data as $log) {
-            $sheet->setCellValue('A' . $row, $log['id_log']);
-            $sheet->setCellValue('B' . $row, $log['tanggal']);
-            $sheet->setCellValue('C' . $row, $log['jam']);
-            $sheet->setCellValue('D' . $row, $log['cctv_lokasi']);
-            $sheet->setCellValue('E' . $row, $log['nama_teknisi']);
-            $sheet->setCellValue('F' . $row, $log['deskripsi_log']);
-            $row++;
-        }
+        // --- BAGIAN BARU UNTUK FORMAT SEBAGAI TABEL ---
+        // 1. Tentukan range tabel (dari A1 sampai kolom terakhir di baris terakhir)
+        $lastColumn = $sheet->getHighestColumn();
+        $lastRow = $sheet->getHighestRow();
+        $tableRange = 'A1:' . $lastColumn . $lastRow;
 
-        // 5. Atur header HTTP untuk memicu download
+        // 2. Buat objek Tabel
+        $table = new Table($tableRange, 'LaporanMaintenanceTable');
+
+        // 3. Buat dan terapkan style tabel
+        $tableStyle = new TableStyle();
+        // TABLE_STYLE_MEDIUM9 adalah style bawaan dengan warna biru-abu
+        $tableStyle->setTheme(TableStyle::TABLE_STYLE_MEDIUM9);
+        $tableStyle->setShowRowStripes(true);
+        $tableStyle->setShowFirstColumn(true);
+        
+        $table->setStyle($tableStyle);
+
+        // 4. Tambahkan objek tabel ke worksheet
+        $sheet->addTable($table);
+        // --- AKHIR BAGIAN BARU ---
+
+        // Atur header HTTP untuk download
         $filename = 'laporan-maintenance-' . date('Y-m-d') . '.xlsx';
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="' . $filename . '"');
         header('Cache-Control: max-age=0');
 
-        // 6. Buat file Excel dan kirim ke output
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
         exit();
     }
+
 
 }
