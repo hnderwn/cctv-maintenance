@@ -41,13 +41,15 @@ switch ($page) {
         break;
     
     // Rute laporan ditambah dengan aksi CRUD via halaman form
-    case 'laporan_maintenance': case 'maintenance_create': case 'maintenance_store': case 'maintenance_edit': case 'maintenance_update': case 'maintenance_delete':
-        require_once '../app/Controllers/MaintenanceController.php'; $c = new MaintenanceController($conn);
+    case 'laporan_maintenance': case 'maintenance_create': case 'maintenance_store': case 'maintenance_edit': case 'maintenance_update': case 'maintenance_delete': case 'export_maintenance': // <-- RUTE BARU
+        require_once '../app/Controllers/MaintenanceController.php';
+        $c = new MaintenanceController($conn);
         if ($page === 'laporan_maintenance') $c->index();
         elseif ($page === 'maintenance_create') $c->create();
         elseif ($page === 'maintenance_store') $c->store();
         elseif ($page === 'maintenance_edit') $c->edit();
         elseif ($page === 'maintenance_update') $c->update();
+        elseif ($page === 'export_maintenance') $c->exportToExcel(); // <-- AKSI BARU
         else $c->delete();
         break;
         

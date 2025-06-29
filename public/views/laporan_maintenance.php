@@ -15,7 +15,9 @@
 
     <div class="mb-3">
         <a href="index.php?page=maintenance_create" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-2"></i>Tambah Laporan Maintenance
+            <a href="index.php?page=maintenance_create" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Tambah Laporan
+            </a>
         </a>
     </div>
 

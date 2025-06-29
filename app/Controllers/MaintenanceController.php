@@ -1,6 +1,9 @@
 <?php
 // app/Controllers/MaintenanceController.php
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 require_once '../app/Models/LogMaintenanceModel.php';
 require_once '../app/Models/TeknisiModel.php';
 require_once '../app/Models/CctvUnitModel.php'; 
@@ -82,4 +85,48 @@ class MaintenanceController {
         header("Location: index.php?page=laporan_maintenance");
         exit();
     }
+    
+    /**
+     * FUNGSI BARU: Untuk handle export data ke Excel
+     */
+        public function exportToExcel() {
+        // 1. Buat object spreadsheet baru
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        
+        // 2. Buat header untuk tabel di Excel
+        $sheet->setCellValue('A1', 'ID Log');
+        $sheet->setCellValue('B1', 'Tanggal');
+        $sheet->setCellValue('C1', 'Jam');
+        $sheet->setCellValue('D1', 'Lokasi CCTV');
+        $sheet->setCellValue('E1', 'Nama Teknisi');
+        $sheet->setCellValue('F1', 'Deskripsi');
+
+        // 3. Ambil data dari database
+        $data = $this->logMaintenanceModel->getAll();
+
+        // 4. Masukkan data ke dalam sheet Excel
+        $row = 2; // Mulai dari baris kedua
+        foreach ($data as $log) {
+            $sheet->setCellValue('A' . $row, $log['id_log']);
+            $sheet->setCellValue('B' . $row, $log['tanggal']);
+            $sheet->setCellValue('C' . $row, $log['jam']);
+            $sheet->setCellValue('D' . $row, $log['cctv_lokasi']);
+            $sheet->setCellValue('E' . $row, $log['nama_teknisi']);
+            $sheet->setCellValue('F' . $row, $log['deskripsi_log']);
+            $row++;
+        }
+
+        // 5. Atur header HTTP untuk memicu download
+        $filename = 'laporan-maintenance-' . date('Y-m-d') . '.xlsx';
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        // 6. Buat file Excel dan kirim ke output
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit();
+    }
+
 }
