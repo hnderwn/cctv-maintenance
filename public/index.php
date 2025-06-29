@@ -72,15 +72,26 @@ switch ($page) {
     case 'komponen_dipakai_edit':
     case 'komponen_dipakai_update':
     case 'komponen_dipakai_delete':
+    case 'export_komponen_dipakai': // <-- RUTE BARU
         require_once '../app/Controllers/KomponenDipakaiController.php';
         $c = new KomponenDipakaiController($conn);
-        if ($page === 'laporan_komponen_dipakai') $c->index();
-        elseif ($page === 'komponen_dipakai_create') $c->create();
-        elseif ($page === 'komponen_dipakai_store') $c->store();
-        elseif ($page === 'komponen_dipakai_edit') $c->edit();
-        elseif ($page === 'komponen_dipakai_update') $c->update();
-        else $c->delete();
+        if ($page === 'laporan_komponen_dipakai') {
+            $c->index();
+        } elseif ($page === 'komponen_dipakai_create') {
+            $c->create();
+        } elseif ($page === 'komponen_dipakai_store') {
+            $c->store();
+        } elseif ($page === 'komponen_dipakai_edit') {
+            $c->edit();
+        } elseif ($page === 'komponen_dipakai_update') {
+            $c->update();
+        } elseif ($page === 'export_komponen_dipakai') {
+            $c->exportToExcel(); // <-- AKSI BARU
+        } else {
+            $c->delete();
+        }
         break;
+
         
     case 'user': case 'user_create': case 'user_store': case 'user_edit': case 'user_update': case 'user_delete': case 'user_reset_password': // <-- RUTE BARU
         require_once '../app/Controllers/UserController.php'; $c = new UserController($conn);

@@ -93,21 +93,29 @@ class MaintenanceController {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         
-        // Buat header
-        $headers = ['ID Log', 'Tanggal', 'Jam','Deskripsi', 'Lokasi CCTV', 'CCTV Unit', 'Nama Teknisi', 'ID Teknisi'];
+        // Header detail sesuai preferensi lo
+        $headers = ['ID Log', 'Tanggal', 'Jam', 'Deskripsi', 'Lokasi CCTV', 'ID CCTV', 'Nama Teknisi', 'ID Teknisi'];
         $sheet->fromArray($headers, NULL, 'A1');
 
-        // Ambil data
-        // Anggap $data ini array of arrays dari model lo
-        $data = $this->logMaintenanceModel->getAll(); 
+        $data = $this->logMaintenanceModel->getAll();
         
-        // Masukkan data ke sheet mulai dari baris 2
-        $sheet->fromArray($data, NULL, 'A2');
+        // Looping manual (cara aman) untuk memasukkan data
+        $rowNumber = 2;
+        foreach ($data as $row) {
+            $sheet->setCellValue('A' . $rowNumber, $row['id_log']);
+            $sheet->setCellValue('B' . $rowNumber, $row['tanggal']);
+            $sheet->setCellValue('C' . $rowNumber, $row['jam']);
+            $sheet->setCellValue('D' . $rowNumber, $row['deskripsi_log']);
+            $sheet->setCellValue('E' . $rowNumber, $row['cctv_lokasi']);
+            $sheet->setCellValue('F' . $rowNumber, $row['id_cctv']);
+            $sheet->setCellValue('G' . $rowNumber, $row['nama_teknisi']);
+            $sheet->setCellValue('H' . $rowNumber, $row['id_teknisi']);
+            $rowNumber++;
+        }
 
-        // Tentukan range tabel (dari A1 sampai kolom terakhir di baris terakhir)
-        $lastColumn = $sheet->getHighestColumn(); // Misal: 'H'
-        $lastRow = $sheet->getHighestRow();       // Misal: 100
-        $tableRange = 'A1:' . $lastColumn . $lastRow;
+        // --- STYLING PERSIS SEPERTI PREFERENSI LO ---
+        $lastColumn = $sheet->getHighestColumn();
+        $lastRow = $sheet->getHighestRow();
 
         $headerStyle = [
             'font' => [
@@ -118,31 +126,23 @@ class MaintenanceController {
                 'vertical' => Alignment::VERTICAL_CENTER,
             ],
         ];
+        
+        $sheet->getStyle('A1:' . $lastColumn . '1')->applyFromArray($headerStyle);
 
-        // 2. Terapkan style ke baris header (A1 sampai kolom terakhir di baris 1)
-        $headerRange = 'A1:' . $lastColumn . '1';
-        $sheet->getStyle($headerRange)->applyFromArray($headerStyle);
-
-        // 3. Terapkan style ke kolom pertama (dari A2 sampai baris terakhir)
         $firstColumnRange = 'A2:A' . $lastRow;
         $sheet->getStyle($firstColumnRange)->applyFromArray($headerStyle);
-        // --- AKHIR BAGIAN BARU ---
+        // --- AKHIR STYLING ---
 
-
-        // Buat objek Tabel (ini opsional, tapi kode lo udah ada, jadi kita pertahanin)
+        // --- FORMAT SEBAGAI TABEL ---
+        $tableRange = 'A1:' . $lastColumn . $lastRow;
         $table = new Table($tableRange, 'LaporanMaintenanceTable');
-
-        // Buat dan terapkan style tabel
         $tableStyle = new TableStyle();
         $tableStyle->setTheme(TableStyle::TABLE_STYLE_MEDIUM9);
         $tableStyle->setShowRowStripes(true);
         $tableStyle->setShowFirstColumn(true);
-        
         $table->setStyle($tableStyle);
-
-        // Tambahkan objek tabel ke worksheet
         $sheet->addTable($table);
-
+        // --- AKHIR FORMAT TABEL ---
 
         // Atur header HTTP untuk download
         $filename = 'laporan-maintenance-' . date('Y-m-d') . '.xlsx';
@@ -154,7 +154,6 @@ class MaintenanceController {
         $writer->save('php://output');
         exit();
     }
-
 
 
 }

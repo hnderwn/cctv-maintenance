@@ -16,8 +16,19 @@ class TeknisiModel {
      * Mengambil semua data teknisi dari database.
      * @return array Array berisi semua data teknisi, atau array kosong jika tidak ada data.
      */
-    public function getAll() {
-        $sql = "SELECT id_teknisi, nama_teknisi, kontak FROM teknisi ORDER BY nama_teknisi ASC";
+    public function getAll($sortBy = 'nama_teknisi', $sortOrder = 'ASC') {
+        // Whitelist untuk kolom yang diizinkan untuk sorting (demi keamanan)
+        $allowedColumns = ['id_teknisi', 'nama_teknisi', 'kontak'];
+        if (!in_array($sortBy, $allowedColumns)) {
+            $sortBy = 'nama_teknisi'; // Default jika kolom tidak valid
+        }
+
+        // Pastikan sort order hanya ASC atau DESC
+        if (strtoupper($sortOrder) !== 'ASC' && strtoupper($sortOrder) !== 'DESC') {
+            $sortOrder = 'ASC'; // Default jika order tidak valid
+        }
+
+        $sql = "SELECT id_teknisi, nama_teknisi, kontak FROM teknisi ORDER BY $sortBy $sortOrder";
         $result = mysqli_query($this->conn, $sql);
         
         return mysqli_fetch_all($result, MYSQLI_ASSOC);

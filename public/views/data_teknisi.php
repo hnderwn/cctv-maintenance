@@ -23,9 +23,20 @@
         <table class="table table-custom">
             <thead>
                 <tr>
-                    <th>ID Teknisi</th>
-                    <th>Nama Teknisi</th>
-                    <th>Kontak</th>
+                    <?php
+                        // Helper untuk membuat link sorting
+                        function createSortLink($column, $displayName, $currentSort, $currentOrder) {
+                            $order = ($currentSort === $column && $currentOrder === 'ASC') ? 'DESC' : 'ASC';
+                            $icon = '';
+                            if ($currentSort === $column) {
+                                $icon = $currentOrder === 'ASC' ? '<i class="bi bi-sort-up-alt ms-1"></i>' : '<i class="bi bi-sort-down ms-1"></i>';
+                            }
+                            return "<a href='index.php?page=teknisi&sort=$column&order=$order'>$displayName $icon</a>";
+                        }
+                    ?>
+                    <th><?php echo createSortLink('id_teknisi', 'ID Teknisi', $sortBy, $sortOrder); ?></th>
+                    <th><?php echo createSortLink('nama_teknisi', 'Nama Teknisi', $sortBy, $sortOrder); ?></th>
+                    <th><?php echo createSortLink('kontak', 'Kontak', $sortBy, $sortOrder); ?></th>
                     <?php if ($_SESSION['role'] === 'admin'): ?>
                         <th class="text-center">Aksi</th>
                     <?php endif; ?>
@@ -40,20 +51,14 @@
                             <td><?php echo htmlspecialchars($teknisi['kontak']); ?></td>
                             <?php if ($_SESSION['role'] === 'admin'): ?>
                             <td class="text-center">
-                                <a href="index.php?page=teknisi_edit&id=<?php echo $teknisi['id_teknisi']; ?>" class="btn btn-sm btn-warning">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <a href="index.php?page=teknisi_delete&id=<?php echo $teknisi['id_teknisi']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus data ini?');">
-                                    <i class="bi bi-trash-fill"></i>
-                                </a>
+                                <a href="index.php?page=teknisi_edit&id=<?php echo $teknisi['id_teknisi']; ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>
+                                <a href="index.php?page=teknisi_delete&id=<?php echo $teknisi['id_teknisi']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus data ini?');"><i class="bi bi-trash-fill"></i></a>
                             </td>
                             <?php endif; ?>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <tr>
-                        <td colspan="<?php echo ($_SESSION['role'] === 'admin') ? '4' : '3'; ?>" class="text-center text-muted p-5 bg-light">Data teknisi belum ada.</td>
-                    </tr>
+                    <tr><td colspan="<?php echo ($_SESSION['role'] === 'admin') ? '4' : '3'; ?>" class="text-center text-muted p-5 bg-light">Data teknisi belum ada.</td></tr>
                 <?php endif; ?>
             </tbody>
         </table>

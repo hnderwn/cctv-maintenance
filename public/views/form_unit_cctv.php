@@ -43,8 +43,8 @@
                         <select class="form-select" id="status" name="status" required>
                             <option value="Aktif" <?php echo ($isEdit && $cctv['status'] == 'Aktif') ? 'selected' : ''; ?>>Aktif</option>
                             <option value="Tidak Aktif" <?php echo ($isEdit && $cctv['status'] == 'Tidak Aktif') ? 'selected' : ''; ?>>Tidak Aktif</option>
-                            <option value="Dalam Perbaikan" <?php echo ($isEdit && $cctv['status'] == 'Dalam Perbaikan') ? 'selected' : ''; ?>>Dalam Perbaikan</option>
-                            <option value="Dalam Perawatan" <?php echo ($isEdit && $cctv['status'] == 'Dalam Perawatan') ? 'selected' : ''; ?>>Dalam Perawatan</option>
+                            <option value="Perbaikan" <?php echo ($isEdit && $cctv['status'] == 'Perbaikan') ? 'selected' : ''; ?>>Dalam Perbaikan</option>
+                            <option value="Perawatan" <?php echo ($isEdit && $cctv['status'] == 'Perawatan') ? 'selected' : ''; ?>>Dalam Perawatan</option>
                             <option value="Rusak" <?php echo ($isEdit && $cctv['status'] == 'Rusak') ? 'selected' : ''; ?>>Rusak</option>
                         </select>
                     </div>

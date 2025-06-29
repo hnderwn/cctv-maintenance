@@ -21,13 +21,17 @@ class TeknisiController {
             exit();
         }
 
-        // Ambil semua data teknisi dari Model
-        $daftar_teknisi = $this->teknisiModel->getAll();
+        // 1. Ambil parameter sorting dari URL, atau gunakan default
+        $sortBy = isset($_GET['sort']) ? $_GET['sort'] : 'nama_teknisi';
+        $sortOrder = isset($_GET['order']) ? $_GET['order'] : 'ASC';
 
-        // Siapkan variabel yang akan dikirim ke view
+        // 2. Ambil semua data teknisi dari Model dengan parameter sorting
+        $daftar_teknisi = $this->teknisiModel->getAll($sortBy, $sortOrder);
+
+        // 3. Kirim variabel sorting ke view untuk membuat link dinamis
         $pageTitle = "Laporan Data Teknisi";
         
-        // Panggil file view dan kirimkan data
+        // Panggil file view dan kirimkan semua data yang dibutuhkan
         require_once 'views/data_teknisi.php';
     }
 

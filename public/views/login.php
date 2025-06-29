@@ -44,8 +44,8 @@ if (isset($_SESSION['is_logged_in'])) {
                 <div class="d-grid mb-3">
                     <button type="submit" class="btn btn-primary fw-bold">LOGIN</button>
                 </div>
-                <div class="text-center">
-                    <a href="#" class="forgot-password-link">Forgot password?</a>
+                <div class="text-center text-muted">
+                    <p><small>username:admin - password:admin123</small></p>
                 </div>
             </form>
         </div>

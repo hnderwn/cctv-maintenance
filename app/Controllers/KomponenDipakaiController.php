@@ -1,5 +1,11 @@
 <?php
 // app/Controllers/KomponenDipakaiController.php
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
+use PhpOffice\PhpSpreadsheet\Worksheet\Table;
+use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 require_once '../app/Models/LogKomponenDipakaiModel.php';
 require_once '../app/Models/LogMaintenanceModel.php';
@@ -121,8 +127,12 @@ class KomponenDipakaiController {
             'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER,],
         ];
         $sheet->getStyle('A1:' . $lastColumn . '1')->applyFromArray($headerStyle);
-        $sheet->getStyle('A2:A' . $lastRow)->applyFromArray(['font' => ['bold' => true]]);
+        $firstColumnRange = 'A2:A' . $lastRow;
+        $sheet->getStyle($firstColumnRange)->applyFromArray($headerStyle);
         // --- AKHIR STYLING ---
+
+        // --- AKHIR STYLING ---
+
 
         // --- FORMAT SEBAGAI TABEL ---
         $tableRange = 'A1:' . $lastColumn . $lastRow;

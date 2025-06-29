@@ -1,6 +1,9 @@
 <?php
 // app/Controllers/KerusakanController.php
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 require_once '../app/Models/LogKerusakanModel.php';
 require_once '../app/Models/TeknisiModel.php';
 require_once '../app/Models/CctvUnitModel.php';
@@ -112,13 +115,19 @@ class KerusakanController {
         $lastRow = $sheet->getHighestRow();
 
         $headerStyle = [
-            'font' => ['bold' => true,],
-            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER,],
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
         ];
+        
         $sheet->getStyle('A1:' . $lastColumn . '1')->applyFromArray($headerStyle);
 
-        $firstColumnStyle = ['font' => ['bold' => true,]];
-        $sheet->getStyle('A2:A' . $lastRow)->applyFromArray($firstColumnStyle);
+        $firstColumnRange = 'A2:A' . $lastRow;
+        $sheet->getStyle($firstColumnRange)->applyFromArray($headerStyle);
         // --- AKHIR STYLING ---
 
         // --- FORMAT SEBAGAI TABEL ---

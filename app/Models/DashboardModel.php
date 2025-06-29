@@ -24,7 +24,7 @@ class DashboardModel {
      * @return int
      */
     public function countProblemCctv() {
-        $sql = "SELECT COUNT(id_cctv) as total FROM cctv WHERE status IN ('Rusak', 'Dalam Perbaikan')";
+        $sql = "SELECT COUNT(id_cctv) as total FROM cctv WHERE status IN ('Perbaikan', 'Perawatan', 'Rusak')";
         $result = mysqli_query($this->conn, $sql);
         $data = mysqli_fetch_assoc($result);
         return $data['total'] ?? 0;
