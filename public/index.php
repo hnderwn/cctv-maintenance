@@ -1,6 +1,8 @@
 <?php
 // public/index.php
 
+require_once '../vendor/autoload.php';
+
 session_start();
 $conn = require_once '../config/database.php';
 $page = isset($_GET['page']) ? $_GET['page'] : 'login';
