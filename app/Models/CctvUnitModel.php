@@ -1,0 +1,66 @@
+<?php
+// app/Models/CctvUnitModel.php
+
+class CctvUnitModel {
+    private $conn;
+
+    public function __construct($dbConnection) {
+        $this->conn = $dbConnection;
+    }
+    
+    // FUNGSI BARU YANG KEMARIN LUPA DITAMBAHKAN
+    /**
+     * Mengambil semua data unit CCTV untuk dropdown (hanya ID dan lokasi).
+     * @return array
+     */
+    public function getAllForDropdown() {
+        $sql = "SELECT id_cctv, lokasi FROM cctv ORDER BY lokasi ASC";
+        $result = mysqli_query($this->conn, $sql);
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+    public function getAll() {
+        // QUERY DIPERLENGKAP: tambahkan cm.manufaktur dan cm.spesifikasi
+        $sql = "SELECT c.id_cctv, c.lokasi, c.status, c.keterangan, c.id_model, 
+                       cm.nama_model, cm.manufaktur, cm.spesifikasi
+                FROM cctv c
+                JOIN cctv_models cm ON c.id_model = cm.id_model
+                ORDER BY c.lokasi ASC";
+        $result = mysqli_query($this->conn, $sql);
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+    public function getById($id) {
+        $sql = "SELECT id_cctv, lokasi, status, id_model, keterangan FROM cctv WHERE id_cctv = ?";
+        $stmt = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($stmt, "s", $id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        return mysqli_fetch_assoc($result);
+    }
+
+    public function create($data) {
+        $sql = "INSERT INTO cctv (id_cctv, lokasi, status, id_model, keterangan) VALUES (?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($stmt, "sssss", 
+            $data['id_cctv'], $data['lokasi'], $data['status'], $data['id_model'], $data['keterangan']
+        );
+        return mysqli_stmt_execute($stmt);
+    }
+
+    public function update($id, $data) {
+        $sql = "UPDATE cctv SET lokasi = ?, status = ?, id_model = ?, keterangan = ? WHERE id_cctv = ?";
+        $stmt = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($stmt, "sssss",
+            $data['lokasi'], $data['status'], $data['id_model'], $data['keterangan'], $id
+        );
+        return mysqli_stmt_execute($stmt);
+    }
+
+    public function delete($id) {
+        $sql = "DELETE FROM cctv WHERE id_cctv = ?";
+        $stmt = mysqli_prepare($this->conn, $sql);
+        mysqli_stmt_bind_param($stmt, "s", $id);
+        return mysqli_stmt_execute($stmt);
+    }
+}

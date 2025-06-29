@@ -1,0 +1,212 @@
+:root {
+  --sidebar-width: 250px;
+  --sidebar-mini-width: 80px;
+  --navbar-height: 60px;
+  --primary-blue: rgb(8, 68, 128);
+  --hover-blue: rgb(6, 54, 102);
+  --background-light: #f4f6f9;
+}
+
+body {
+  background-color: var(--background-light);
+  transition: padding-left 0.3s ease; /* Transisi untuk body */
+}
+
+a.card-box,
+a.card-box:hover {
+  text-decoration: none; /* Hapus garis bawah */
+  color: inherit; /* Warna teks ikutin parent */
+}
+
+/* === MAIN NAVBAR STYLE (BARU) === */
+.main-navbar {
+  height: var(--navbar-height);
+  background-color: #fff;
+  border-bottom: 1px solid #dee2e6;
+  padding: 0 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-width); /* Posisi normal */
+  right: 0;
+  z-index: 1030;
+  transition: left 0.3s ease;
+}
+.navbar-left,
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+#sidebar-toggle-btn {
+  font-size: 1.5rem;
+  color: var(--primary-blue);
+}
+
+/* === SIDEBAR & KONTEN === */
+.sidebar {
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  background-color: var(--primary-blue);
+  color: #fff;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  z-index: 1031;
+}
+
+.content-wrapper {
+  margin-top: 1rem;
+  margin-left: var(--sidebar-width);
+  padding: 30px;
+  transition: margin-left 0.3s ease;
+}
+
+/* === KONDISI KETIKA SIDEBAR JADI MINI === */
+body.sidebar-mini .sidebar {
+  width: var(--sidebar-mini-width);
+}
+body.sidebar-mini .content-wrapper {
+  margin-left: var(--sidebar-mini-width);
+}
+body.sidebar-mini .main-navbar {
+  left: var(--sidebar-mini-width);
+}
+body.sidebar-mini .sidebar .nav-link-text,
+body.sidebar-mini .sidebar .sidebar-heading-divider,
+body.sidebar-mini .sidebar .sidebar-title > span {
+  display: none;
+}
+body.sidebar-mini .sidebar .nav-link {
+  justify-content: center;
+}
+
+/* === STYLE VISUAL LAINNYA (TETAP SAMA) === */
+.sidebar .sidebar-title {
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+  white-space: nowrap;
+}
+.sidebar .nav-link {
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 0.375rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.sidebar .nav-link:hover {
+  background-color: var(--hover-blue);
+}
+.sidebar .nav-link i {
+  min-width: 30px;
+  font-size: 1.1rem;
+}
+
+.table-custom {
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+.table-custom thead th {
+  background-color: transparent;
+  color: #6c757d;
+  border: none;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+.table-custom tbody tr {
+  background-color: #fff;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border-radius: 0.5rem;
+}
+.table-custom tbody td {
+  padding: 1rem;
+  vertical-align: middle;
+  border: none;
+}
+
+.detail-row {
+  background-color: rgb(245, 245, 245);
+  padding: 1.5rem;
+  border-top: 2px solid #e9ecef;
+}
+
+.expandable-row {
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.expandable-row:hover {
+  background-color: #f5f5f5;
+}
+
+.login-body {
+  background-image: url('../img/bg_login.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.login-card {
+  max-width: 450px;
+  width: 100%;
+  border: none;
+  border-radius: 1rem;
+  background-color: rgba(255, 255, 255, 0.95); /* Sedikit transparan */
+  backdrop-filter: blur(5px); /* Efek blur untuk background di belakang kartu */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.18);
+}
+
+.login-icon {
+  font-size: 3rem;
+  color: var(--primary-blue);
+}
+
+.login-title {
+  color: var(--text-dark);
+  font-weight: bold;
+}
+
+.login-card .input-group-text {
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+}
+
+.login-card .form-control {
+  height: 48px;
+}
+
+.login-card .btn-primary {
+  background-color: var(--primary-blue);
+  border-color: var(--primary-blue);
+  padding: 12px;
+}
+
+.login-card .btn-primary:hover {
+  background-color: var(--hover-blue);
+  border-color: var(--hover-blue);
+}
+
+.forgot-password-link {
+  font-size: 0.9rem;
+  color: #6c757d;
+  text-decoration: none;
+}
+.forgot-password-link:hover {
+  text-decoration: underline;
+}
