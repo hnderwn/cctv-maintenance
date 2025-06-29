@@ -9,6 +9,7 @@ require_once '../app/Models/TeknisiModel.php';
 require_once '../app/Models/CctvUnitModel.php'; 
 use PhpOffice\PhpSpreadsheet\Worksheet\Table;     
 use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 class MaintenanceController {
     private $logMaintenanceModel, $teknisiModel, $cctvUnitModel;
@@ -93,35 +94,55 @@ class MaintenanceController {
         $sheet = $spreadsheet->getActiveSheet();
         
         // Buat header
-        $headers = ['ID Log', 'Tanggal', 'Jam', 'Lokasi CCTV', 'Nama Teknisi', 'Deskripsi'];
+        $headers = ['ID Log', 'Tanggal', 'Jam','Deskripsi', 'Lokasi CCTV', 'CCTV Unit', 'Nama Teknisi', 'ID Teknisi'];
         $sheet->fromArray($headers, NULL, 'A1');
 
         // Ambil data
-        $data = $this->logMaintenanceModel->getAll();
+        // Anggap $data ini array of arrays dari model lo
+        $data = $this->logMaintenanceModel->getAll(); 
+        
         // Masukkan data ke sheet mulai dari baris 2
         $sheet->fromArray($data, NULL, 'A2');
 
-        // --- BAGIAN BARU UNTUK FORMAT SEBAGAI TABEL ---
-        // 1. Tentukan range tabel (dari A1 sampai kolom terakhir di baris terakhir)
-        $lastColumn = $sheet->getHighestColumn();
-        $lastRow = $sheet->getHighestRow();
+        // Tentukan range tabel (dari A1 sampai kolom terakhir di baris terakhir)
+        $lastColumn = $sheet->getHighestColumn(); // Misal: 'H'
+        $lastRow = $sheet->getHighestRow();       // Misal: 100
         $tableRange = 'A1:' . $lastColumn . $lastRow;
 
-        // 2. Buat objek Tabel
+        $headerStyle = [
+            'font' => [
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ];
+
+        // 2. Terapkan style ke baris header (A1 sampai kolom terakhir di baris 1)
+        $headerRange = 'A1:' . $lastColumn . '1';
+        $sheet->getStyle($headerRange)->applyFromArray($headerStyle);
+
+        // 3. Terapkan style ke kolom pertama (dari A2 sampai baris terakhir)
+        $firstColumnRange = 'A2:A' . $lastRow;
+        $sheet->getStyle($firstColumnRange)->applyFromArray($headerStyle);
+        // --- AKHIR BAGIAN BARU ---
+
+
+        // Buat objek Tabel (ini opsional, tapi kode lo udah ada, jadi kita pertahanin)
         $table = new Table($tableRange, 'LaporanMaintenanceTable');
 
-        // 3. Buat dan terapkan style tabel
+        // Buat dan terapkan style tabel
         $tableStyle = new TableStyle();
-        // TABLE_STYLE_MEDIUM9 adalah style bawaan dengan warna biru-abu
         $tableStyle->setTheme(TableStyle::TABLE_STYLE_MEDIUM9);
         $tableStyle->setShowRowStripes(true);
         $tableStyle->setShowFirstColumn(true);
         
         $table->setStyle($tableStyle);
 
-        // 4. Tambahkan objek tabel ke worksheet
+        // Tambahkan objek tabel ke worksheet
         $sheet->addTable($table);
-        // --- AKHIR BAGIAN BARU ---
+
 
         // Atur header HTTP untuk download
         $filename = 'laporan-maintenance-' . date('Y-m-d') . '.xlsx';
@@ -133,6 +154,7 @@ class MaintenanceController {
         $writer->save('php://output');
         exit();
     }
+
 
 
 }
