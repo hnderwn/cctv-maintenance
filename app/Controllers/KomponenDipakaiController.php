@@ -75,4 +75,74 @@ class KomponenDipakaiController {
         else { $_SESSION['error_message'] = "Gagal menghapus log."; }
         header("Location: index.php?page=laporan_komponen_dipakai"); exit();
     }
+
+        public function exportToExcel() {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        
+        $headers = ['ID Log', 'ID Laporan', 'Jenis Laporan', 'Tanggal', 'Jam', 'Lokasi CCTV', 'ID Komponen', 'Nama Komponen', 'Jumlah', 'Satuan', 'Harga Satuan (Rp)', 'Total Biaya (Rp)'];
+        $sheet->fromArray($headers, NULL, 'A1');
+
+        $data = $this->komponenDipakaiModel->getAllUsedComponents();
+        
+        // Looping manual (cara aman)
+        $rowNumber = 2;
+        foreach ($data as $row) {
+            $sheet->setCellValue('A' . $rowNumber, $row['id']);
+            $sheet->setCellValue('B' . $rowNumber, $row['id_laporan_referensi']);
+            $sheet->setCellValue('C' . $rowNumber, $row['jenis_laporan']);
+            $sheet->setCellValue('D' . $rowNumber, $row['tanggal_laporan']);
+            $sheet->setCellValue('E' . $rowNumber, $row['jam_laporan']);
+            $sheet->setCellValue('F' . $rowNumber, $row['lokasi_cctv']);
+            $sheet->setCellValue('G' . $rowNumber, $row['id_komponen']);
+            $sheet->setCellValue('H' . $rowNumber, $row['nama_komponen']);
+            $sheet->setCellValue('I' . $rowNumber, $row['jumlah_dipakai']);
+            $sheet->setCellValue('J' . $rowNumber, $row['satuan']);
+            $sheet->setCellValue('K' . $rowNumber, $row['harga_satuan']);
+            $sheet->setCellValue('L' . $rowNumber, $row['biaya']);
+
+            // Format kolom harga jadi Rupiah
+            $sheet->getStyle('K' . $rowNumber)->getNumberFormat()->setFormatCode('"Rp "#,##0');
+            $sheet->getStyle('L' . $rowNumber)->getNumberFormat()->setFormatCode('"Rp "#,##0');
+            
+            $rowNumber++;
+        }
+        
+        // Atur lebar kolom otomatis biar rapi
+        foreach (range('A', $sheet->getHighestColumn()) as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // --- STYLING PERSIS SEPERTI PREFERENSI LO ---
+        $lastColumn = $sheet->getHighestColumn();
+        $lastRow = $sheet->getHighestRow();
+        $headerStyle = [
+            'font' => ['bold' => true,],
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER,],
+        ];
+        $sheet->getStyle('A1:' . $lastColumn . '1')->applyFromArray($headerStyle);
+        $sheet->getStyle('A2:A' . $lastRow)->applyFromArray(['font' => ['bold' => true]]);
+        // --- AKHIR STYLING ---
+
+        // --- FORMAT SEBAGAI TABEL ---
+        $tableRange = 'A1:' . $lastColumn . $lastRow;
+        $table = new Table($tableRange, 'LaporanKomponenTable');
+        $tableStyle = new TableStyle();
+        $tableStyle->setTheme(TableStyle::TABLE_STYLE_MEDIUM9);
+        $tableStyle->setShowRowStripes(true);
+        $tableStyle->setShowFirstColumn(true);
+        $table->setStyle($tableStyle);
+        $sheet->addTable($table);
+        // --- AKHIR FORMAT TABEL ---
+
+        // Atur header HTTP untuk download
+        $filename = 'laporan-komponen-dipakai-' . date('Y-m-d') . '.xlsx';
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit();
+    }
 }
