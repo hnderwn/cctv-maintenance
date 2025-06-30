@@ -18,12 +18,19 @@ class KomponenController {
             header("Location: index.php?page=login");
             exit();
         }
-
-        $pageTitle = "Data Stok Komponen";
-        $daftar_komponen = $this->komponenModel->getAll();
         
+        // Ambil parameter sorting dari URL
+        $sortBy = isset($_GET['sort']) ? $_GET['sort'] : 'nama_komponen';
+        $sortOrder = isset($_GET['order']) ? $_GET['order'] : 'ASC';
+        
+        $pageTitle = "Data Komponen";
+        // Ambil data dari Model dengan parameter sorting
+        $daftar_komponen = $this->komponenModel->getAll($sortBy, $sortOrder);
+        
+        // Kirim variabel sorting ke view
         require_once 'views/data_komponen.php';
     }
+
 
     /**
      * Menampilkan form untuk menambah komponen baru.

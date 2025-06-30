@@ -22,8 +22,18 @@ class KomponenModel {
      * Mengambil semua data komponen untuk tabel laporan.
      * @return array
      */
-    public function getAll() {
-        $sql = "SELECT id_komponen, nama_komponen, satuan, stok, harga_satuan FROM komponen ORDER BY nama_komponen ASC";
+    public function getAll($sortBy = 'nama_komponen', $sortOrder = 'ASC') {
+        // Whitelist kolom yang diizinkan untuk sorting
+        $allowedColumns = ['id_komponen', 'nama_komponen', 'satuan', 'stok', 'harga_satuan'];
+        if (!in_array($sortBy, $allowedColumns)) {
+            $sortBy = 'nama_komponen'; // Default
+        }
+
+        if (strtoupper($sortOrder) !== 'ASC' && strtoupper($sortOrder) !== 'DESC') {
+            $sortOrder = 'ASC'; // Default
+        }
+
+        $sql = "SELECT id_komponen, nama_komponen, satuan, stok, harga_satuan FROM komponen ORDER BY $sortBy $sortOrder";
         $result = mysqli_query($this->conn, $sql);
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
