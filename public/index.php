@@ -104,22 +104,6 @@ switch ($page) {
         else $c->delete();
         break;
 
-    // Rute untuk semua fitur Komponen Dipakai
-    case 'laporan_komponen_dipakai':
-    case 'komponen_dipakai_create':
-    case 'komponen_dipakai_store':
-        require_once '../app/Controllers/KomponenDipakaiController.php';
-        $c = new KomponenDipakaiController($conn);
-        if ($page === 'laporan_komponen_dipakai') {
-            $c->index(); // Menampilkan laporan
-        } elseif ($page === 'komponen_dipakai_create') {
-            $c->create(); // Menampilkan form
-        } else {
-            $c->store(); // Menyimpan data
-        }
-        break;
-
-
     // --- Endpoint API ---
     case 'api_get_log_details': // Untuk modal detail komponen
         require_once '../app/Controllers/ApiController.php'; (new ApiController($conn))->getLogDetails();

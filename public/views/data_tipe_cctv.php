@@ -23,11 +23,21 @@
         <table class="table table-custom">
             <thead>
                 <tr>
-                    <th>ID Model</th>
-                    <th>Nama Model</th>
-                    <th>Manufaktur</th>
-                    <th>Spesifikasi (Singkat)</th>
-                    <?php if ($_SESSION['role'] === 'admin'): ?>
+                    <?php
+                        function createSortLink($column, $displayName, $currentSort, $currentOrder) {
+                            $order = ($currentSort === $column && $currentOrder === 'ASC') ? 'DESC' : 'ASC';
+                            $icon = '';
+                            if ($currentSort === $column) {
+                                $icon = $currentOrder === 'ASC' ? '<i class="bi bi-sort-up-alt ms-1"></i>' : '<i class="bi bi-sort-down ms-1"></i>';
+                            }
+                            // Ganti 'page=teknisi' menjadi 'page=cctv_tipe'
+                            return "<a href='index.php?page=cctv_tipe&sort=$column&order=$order'>$displayName $icon</a>";
+                        }
+                    ?>
+                    <th><?php echo createSortLink('id_model', 'ID Model', $sortBy, $sortOrder); ?></th>
+                    <th><?php echo createSortLink('nama_model', 'Nama Model', $sortBy, $sortOrder); ?></th>
+                    <th><?php echo createSortLink('manufaktur', 'Manufaktur', $sortBy, $sortOrder); ?></th>
+                    <th>Spesifikasi (Singkat)</th> <?php if ($_SESSION['role'] === 'admin'): ?>
                         <th class="text-center">Aksi</th>
                     <?php endif; ?>
                 </tr>
@@ -35,7 +45,7 @@
             <tbody>
                 <?php if (!empty($daftar_model)): ?>
                     <?php foreach ($daftar_model as $model): ?>
-                        <tr class="expandable-row" data-bs-toggle="collapse" data-bs-target="#detail-<?php echo $model['id_model']; ?>" aria-expanded="false" aria-controls="detail-<?php echo $model['id_model']; ?>">
+                        <tr class="expandable-row" data-bs-toggle="collapse" data-bs-target="#detail-<?php echo $model['id_model']; ?>">
                             <td><strong><?php echo htmlspecialchars($model['id_model']); ?></strong></td>
                             <td><?php echo htmlspecialchars($model['nama_model']); ?></td>
                             <td><?php echo htmlspecialchars($model['manufaktur']); ?></td>
@@ -47,9 +57,7 @@
                             </td>
                             <?php if ($_SESSION['role'] === 'admin'): ?>
                             <td class="text-center">
-                                <a href="index.php?page=cctv_tipe_edit&id=<?php echo $model['id_model']; ?>" class="btn btn-sm btn-warning">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
+                                <a href="index.php?page=cctv_tipe_edit&id=<?php echo $model['id_model']; ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>
                                 <a href="index.php?page=cctv_tipe_delete&id=<?php echo $model['id_model']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus data ini?');">
                                     <i class="bi bi-trash-fill"></i>
                                 </a>

@@ -9,9 +9,20 @@ class CctvTipeModel {
         $this->conn = $dbConnection;
     }
 
-    public function getAll() {
-        $sql = "SELECT id_model, nama_model, manufaktur, spesifikasi, umur_ekonomis_th FROM cctv_models ORDER BY nama_model ASC";
+    public function getAll($sortBy = 'nama_model', $sortOrder = 'ASC') {
+        // Whitelist kolom yang diizinkan untuk sorting
+        $allowedColumns = ['id_model', 'nama_model', 'manufaktur', 'umur_ekonomis_th'];
+        if (!in_array($sortBy, $allowedColumns)) {
+            $sortBy = 'nama_model'; // Default
+        }
+
+        if (strtoupper($sortOrder) !== 'ASC' && strtoupper($sortOrder) !== 'DESC') {
+            $sortOrder = 'ASC'; // Default
+        }
+
+        $sql = "SELECT id_model, nama_model, manufaktur, spesifikasi, umur_ekonomis_th FROM cctv_models ORDER BY $sortBy $sortOrder";
         $result = mysqli_query($this->conn, $sql);
+        
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 

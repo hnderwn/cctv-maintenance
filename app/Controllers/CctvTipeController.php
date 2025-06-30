@@ -14,12 +14,23 @@ class CctvTipeController {
     }
 
     public function index() {
-        if (!isset($_SESSION['is_logged_in'])) { header("Location: index.php?page=login"); exit(); }
+        if (!isset($_SESSION['is_logged_in'])) {
+            header("Location: index.php?page=login");
+            exit();
+        }
+        
+        // 1. Ambil parameter sorting dari URL
+        $sortBy = isset($_GET['sort']) ? $_GET['sort'] : 'nama_model';
+        $sortOrder = isset($_GET['order']) ? $_GET['order'] : 'ASC';
+
+        // 2. Ambil data dari Model dengan sorting
+        $daftar_model = $this->tipeModel->getAll($sortBy, $sortOrder);
+
+        // 3. Kirim semua variabel ke view
         $pageTitle = "Data Tipe CCTV";
-        $daftar_model = $this->tipeModel->getAll();
-        // Panggil view dengan nama baru
         require_once 'views/data_tipe_cctv.php';
     }
+
 
     public function create() {
         if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin') { $_SESSION['error_message'] = "Anda tidak memiliki hak akses."; header("Location: index.php?page=cctv_tipe"); exit(); }
