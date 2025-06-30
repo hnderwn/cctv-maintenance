@@ -23,10 +23,21 @@
         <table class="table table-custom">
             <thead>
                 <tr>
-                    <th>ID CCTV</th>
-                    <th>Lokasi</th>
-                    <th>Model</th>
-                    <th>Status</th>
+                    <?php
+                        function createSortLink($column, $displayName, $currentSort, $currentOrder) {
+                            $order = ($currentSort === $column && $currentOrder === 'ASC') ? 'DESC' : 'ASC';
+                            $icon = '';
+                            if ($currentSort === $column) {
+                                $icon = $currentOrder === 'ASC' ? '<i class="bi bi-sort-up-alt ms-1"></i>' : '<i class="bi bi-sort-down ms-1"></i>';
+                            }
+                            // Ganti page= jadi 'cctv_unit'
+                            return "<a href='index.php?page=cctv_unit&sort=$column&order=$order'>$displayName $icon</a>";
+                        }
+                    ?>
+                    <th><?php echo createSortLink('id_cctv', 'ID CCTV', $sortBy, $sortOrder); ?></th>
+                    <th><?php echo createSortLink('lokasi', 'Lokasi', $sortBy, $sortOrder); ?></th>
+                    <th><?php echo createSortLink('nama_model', 'Model', $sortBy, $sortOrder); ?></th>
+                    <th><?php echo createSortLink('status', 'Status', $sortBy, $sortOrder); ?></th>
                     <?php if ($_SESSION['role'] === 'admin'): ?>
                         <th class="text-center">Aksi</th>
                     <?php endif; ?>
@@ -53,12 +64,8 @@
                             </td>
                             <?php if ($_SESSION['role'] === 'admin'): ?>
                             <td class="text-center">
-                                <a href="index.php?page=cctv_unit_edit&id=<?php echo $cctv['id_cctv']; ?>" class="btn btn-sm btn-warning">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <a href="index.php?page=cctv_unit_delete&id=<?php echo $cctv['id_cctv']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus data CCTV ini?');">
-                                    <i class="bi bi-trash-fill"></i>
-                                </a>
+                                <a href="index.php?page=cctv_unit_edit&id=<?php echo $cctv['id_cctv']; ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>
+                                <a href="index.php?page=cctv_unit_delete&id=<?php echo $cctv['id_cctv']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus data CCTV ini?');"><i class="bi bi-trash-fill"></i></a>
                             </td>
                             <?php endif; ?>
                         </tr>

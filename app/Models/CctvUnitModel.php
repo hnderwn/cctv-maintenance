@@ -19,16 +19,33 @@ class CctvUnitModel {
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    public function getAll() {
-        // QUERY DIPERLENGKAP: tambahkan cm.manufaktur dan cm.spesifikasi
+    public function getAll($sortBy = 'lokasi', $sortOrder = 'ASC') {
+        // Whitelist kolom yang diizinkan untuk sorting
+        $allowedColumns = ['c.id_cctv', 'c.lokasi', 'c.status', 'cm.nama_model'];
+        // Ganti nama kolom dari view ke nama asli di query
+        $sortColumnMap = [
+            'id_cctv' => 'c.id_cctv',
+            'lokasi' => 'c.lokasi',
+            'status' => 'c.status',
+            'nama_model' => 'cm.nama_model'
+        ];
+
+        $dbSortColumn = isset($sortColumnMap[$sortBy]) ? $sortColumnMap[$sortBy] : 'c.lokasi';
+
+        if (strtoupper($sortOrder) !== 'ASC' && strtoupper($sortOrder) !== 'DESC') {
+            $sortOrder = 'ASC';
+        }
+
         $sql = "SELECT c.id_cctv, c.lokasi, c.status, c.keterangan, c.id_model, 
                        cm.nama_model, cm.manufaktur, cm.spesifikasi
                 FROM cctv c
                 JOIN cctv_models cm ON c.id_model = cm.id_model
-                ORDER BY c.lokasi ASC";
+                ORDER BY $dbSortColumn $sortOrder";
+        
         $result = mysqli_query($this->conn, $sql);
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
+
 
     public function getById($id) {
         $sql = "SELECT id_cctv, lokasi, status, id_model, keterangan FROM cctv WHERE id_cctv = ?";

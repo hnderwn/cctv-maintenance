@@ -15,8 +15,16 @@ class CctvUnitController {
 
     public function index() {
         if (!isset($_SESSION['is_logged_in'])) { header("Location: index.php?page=login"); exit(); }
+        
+        // Ambil parameter sorting dari URL
+        $sortBy = isset($_GET['sort']) ? $_GET['sort'] : 'lokasi';
+        $sortOrder = isset($_GET['order']) ? $_GET['order'] : 'ASC';
+
         $pageTitle = "Data Unit CCTV";
-        $daftar_cctv = $this->unitModel->getAll();
+        // Ambil data dari Model dengan parameter sorting
+        $daftar_cctv = $this->unitModel->getAll($sortBy, $sortOrder);
+
+        // Kirim variabel sorting ke view
         require_once 'views/data_unit_cctv.php';
     }
 
