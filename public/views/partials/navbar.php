@@ -3,12 +3,15 @@
         <button class="btn me-2" type="button" id="sidebar-toggle-btn">
             <i class="bi bi-list"></i>
         </button>
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+        
+        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" method="GET" action="index.php">
+            <input type="hidden" name="page" value="search">
             <div class="input-group">
-                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." />
-                <button class="btn btn-primary" type="button"><i class="bi bi-search"></i></button>
+                <input class="form-control" type="text" name="q" placeholder="Cari data..." value="<?php echo isset($_GET['q']) ? htmlspecialchars($_GET['q']) : ''; ?>" />
+                <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
             </div>
         </form>
+
     </div>
     <div class="navbar-right">
         <div class="dropdown">

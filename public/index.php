@@ -17,6 +17,11 @@ switch ($page) {
         require_once '../app/Controllers/DashboardController.php'; (new DashboardController($conn))->index();
         break;
 
+    case 'search':
+        require_once '../app/Controllers/SearchController.php';
+        (new SearchController($conn))->index();
+        break;
+
     case 'teknisi': case 'teknisi_create': case 'teknisi_store': case 'teknisi_edit': case 'teknisi_update': case 'teknisi_delete':
         require_once '../app/Controllers/TeknisiController.php'; $c = new TeknisiController($conn);
         if ($page === 'teknisi') $c->index(); elseif ($page === 'teknisi_create') $c->create(); elseif ($page === 'teknisi_store') $c->store(); elseif ($page === 'teknisi_edit') $c->edit(); elseif ($page === 'teknisi_update') $c->update(); else $c->delete();
