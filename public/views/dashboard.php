@@ -99,6 +99,14 @@
                 <h6 class="mb-0">Tambah User</h6>
             </a>
         </div>
+        
+        <hr class="my-2">
+        <div class="text-center mt-4">
+            <a href="index.php?page=about_us" class="btn btn-outline-primary">
+                Lihat Tim Kami <i class="bi bi-arrow-right-short"></i>
+            </a>
+            <p class="text-muted mb-0"><small>Aplikasi ini dikembangkan dengan ❤️ oleh Tim Hebat.</small></p>
+        </div>
     </div>
 </main>
 

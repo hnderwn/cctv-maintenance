@@ -17,6 +17,10 @@ switch ($page) {
         require_once '../app/Controllers/DashboardController.php'; (new DashboardController($conn))->index();
         break;
 
+    case 'about_us':
+        require_once 'views/about_us.php';
+        break;
+
     case 'search':
         require_once '../app/Controllers/SearchController.php';
         (new SearchController($conn))->index();
