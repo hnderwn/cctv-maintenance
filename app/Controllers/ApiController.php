@@ -1,5 +1,4 @@
 <?php
-// app/Controllers/ApiController.php
 
 require_once '../app/Models/LogKomponenDipakaiModel.php';
 require_once '../app/Models/LogMaintenanceModel.php';
@@ -10,10 +9,9 @@ class ApiController {
 
     public function __construct($dbConnection) {
         $this->conn = $dbConnection;
-        header('Content-Type: application/json'); // Set header agar browser tahu ini JSON
+        header('Content-Type: application/json'); 
     }
 
-    // Fungsi untuk mengambil detail komponen yang dipakai (Modal Detail)
     public function getLogDetails() {
         if (!isset($_GET['id']) || !isset($_GET['type'])) { echo json_encode(['error' => 'Parameter tidak lengkap.']); exit(); }
         $log_id = intval($_GET['id']);

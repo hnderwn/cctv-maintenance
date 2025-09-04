@@ -62,7 +62,7 @@ switch ($page) {
         else $c->delete();
         break;
         
-    case 'laporan_kerusakan': case 'kerusakan_create': case 'kerusakan_store': case 'kerusakan_edit': case 'kerusakan_update': case 'kerusakan_delete': case 'export_kerusakan': // <-- RUTE BARU
+    case 'laporan_kerusakan': case 'kerusakan_create': case 'kerusakan_store': case 'kerusakan_edit': case 'kerusakan_update': case 'kerusakan_delete': case 'export_kerusakan': 
         require_once '../app/Controllers/KerusakanController.php';
         $c = new KerusakanController($conn);
         if ($page === 'laporan_kerusakan') $c->index();
@@ -70,7 +70,7 @@ switch ($page) {
         elseif ($page === 'kerusakan_store') $c->store();
         elseif ($page === 'kerusakan_edit') $c->edit();
         elseif ($page === 'kerusakan_update') $c->update();
-        elseif ($page === 'export_kerusakan') $c->exportToExcel(); // <-- AKSI BARU
+        elseif ($page === 'export_kerusakan') $c->exportToExcel(); 
         else $c->delete();
         break;
 
@@ -109,7 +109,7 @@ switch ($page) {
         elseif ($page === 'user_store') $c->store();
         elseif ($page === 'user_edit') $c->edit();
         elseif ($page === 'user_update') $c->update();
-        elseif ($page === 'user_reset_password') $c->resetPassword(); // <-- AKSI BARU
+        elseif ($page === 'user_reset_password') $c->resetPassword();
         else $c->delete();
         break;
 

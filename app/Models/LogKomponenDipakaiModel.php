@@ -1,5 +1,4 @@
 <?php
-// app/Models/LogKomponenDipakaiModel.php
 
 class LogKomponenDipakaiModel {
     private $conn;
@@ -7,8 +6,6 @@ class LogKomponenDipakaiModel {
     public function __construct($dbConnection) {
         $this->conn = $dbConnection;
     }
-
-    // ... (method create() tetap sama) ...
 
     public function create($data) {
         mysqli_begin_transaction($this->conn);
@@ -76,7 +73,6 @@ class LogKomponenDipakaiModel {
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
     
-    // FUNGSI BARU: Mengambil satu log untuk form edit
     public function getById($id) {
         $sql = "SELECT * FROM log_komponen_dipakai WHERE id = ?";
         $stmt = mysqli_prepare($this->conn, $sql);
@@ -86,41 +82,33 @@ class LogKomponenDipakaiModel {
         return mysqli_fetch_assoc($result);
     }
 
-    // FUNGSI BARU: Logika update data dengan transaksi stok
     public function update($id, $data) {
         mysqli_begin_transaction($this->conn);
         try {
-            // 1. Ambil data lama dan kunci barisnya
             $old_log_sql = "SELECT jumlah_dipakai, id_komponen FROM log_komponen_dipakai WHERE id = ? FOR UPDATE";
             $stmt_old = mysqli_prepare($this->conn, $old_log_sql);
             mysqli_stmt_bind_param($stmt_old, "i", $id);
             mysqli_stmt_execute($stmt_old);
             $old_log = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt_old));
             
-            // 2. Ambil info komponen (harga & stok terkini)
             $komponen_sql = "SELECT harga_satuan, stok FROM komponen WHERE id_komponen = ? FOR UPDATE";
             $stmt_komp = mysqli_prepare($this->conn, $komponen_sql);
             mysqli_stmt_bind_param($stmt_komp, "s", $data['id_komponen']);
             mysqli_stmt_execute($stmt_komp);
             $komponen = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt_komp));
 
-            // 3. Hitung selisih pemakaian stok
-            // Jika komponennya sama, hitung selisihnya. Jika beda, stok lama balik, stok baru kurang.
             $selisih_stok = $data['jumlah_dipakai'] - $old_log['jumlah_dipakai'];
 
-            // 4. Validasi stok
             if ($komponen['stok'] < $selisih_stok) {
-                 mysqli_rollback($this->conn);
-                 return ['success' => false, 'message' => 'Gagal update! Stok komponen tidak mencukupi untuk perubahan ini.'];
+                mysqli_rollback($this->conn);
+                return ['success' => false, 'message' => 'Gagal update! Stok komponen tidak mencukupi untuk perubahan ini.'];
             }
             
-            // 5. Update stok
             $update_stok_sql = "UPDATE komponen SET stok = stok - ? WHERE id_komponen = ?";
             $stmt_update_stok = mysqli_prepare($this->conn, $update_stok_sql);
             mysqli_stmt_bind_param($stmt_update_stok, "is", $selisih_stok, $data['id_komponen']);
             mysqli_stmt_execute($stmt_update_stok);
 
-            // 6. Hitung biaya baru & update log pemakaian
             $biaya_baru = $komponen['harga_satuan'] * $data['jumlah_dipakai'];
             $update_log_sql = "UPDATE log_komponen_dipakai SET id_log_maintenance = ?, id_log_kerusakan = ?, id_komponen = ?, jumlah_dipakai = ?, biaya = ? WHERE id = ?";
             $stmt_update_log = mysqli_prepare($this->conn, $update_log_sql);
@@ -135,7 +123,6 @@ class LogKomponenDipakaiModel {
         }
     }
     
-    // ... (method delete() tetap sama) ...
     public function delete($id) {
         mysqli_begin_transaction($this->conn);
         try {

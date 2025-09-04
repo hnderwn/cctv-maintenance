@@ -6,7 +6,7 @@
 
     <h1 class="h3 mb-4 text-gray-800"><?php echo htmlspecialchars($pageTitle); ?></h1>
 
-    <?php if (isset($_SESSION['success_message'])): ?>
+    <?php if (isset($_SESSION['success_message'])):  ?>
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -37,7 +37,7 @@
                     <th><?php echo createSortLink('id_komponen', 'ID Komponen', $sortBy, $sortOrder); ?></th>
                     <th><?php echo createSortLink('nama_komponen', 'Nama Komponen', $sortBy, $sortOrder); ?></th>
                     <th><?php echo createSortLink('satuan', 'Satuan', $sortBy, $sortOrder); ?></th>
-                    <th class="text-center"><?php echo createSortLink('stok', 'Stok', $sortBy, $sortOrder); ?></th>
+                    <th><?php echo createSortLink('stok', 'Stok', $sortBy, $sortOrder); ?></th>
                     <th><?php echo createSortLink('harga_satuan', 'Harga Satuan (Rp)', $sortBy, $sortOrder); ?></th>
                     <?php if ($_SESSION['role'] === 'admin'): ?>
                         <th class="text-center">Aksi</th>
@@ -48,11 +48,11 @@
                 <?php if (!empty($daftar_komponen)): ?>
                     <?php foreach ($daftar_komponen as $item): ?>
                         <tr>
-                            <td><strong><?php echo htmlspecialchars($item['id_komponen']); ?></strong></td>
-                            <td><?php echo htmlspecialchars($item['nama_komponen']); ?></td>
-                            <td><?php echo htmlspecialchars($item['satuan']); ?></td>
-                            <td class="text-center"><?php echo htmlspecialchars($item['stok']); ?></td>
-                            <td><?php echo number_format($item['harga_satuan'], 0, ',', '.'); ?></td>
+                            <td data-label="ID Komponen"><strong><?php echo htmlspecialchars($item['id_komponen']); ?></strong></td>
+                            <td data-label="Nama Komponen"><?php echo htmlspecialchars($item['nama_komponen']); ?></td>
+                            <td data-label="Satuan"><?php echo htmlspecialchars($item['satuan']); ?></td>
+                            <td data-label="Stok"><?php echo htmlspecialchars($item['stok']); ?></td>
+                            <td data-label="Harga Satuan"><?php echo number_format($item['harga_satuan'], 0, ',', '.'); ?></td>
                             <?php if ($_SESSION['role'] === 'admin'): ?>
                             <td class="text-center">
                                 <a href="index.php?page=komponen_edit&id=<?php echo $item['id_komponen']; ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>

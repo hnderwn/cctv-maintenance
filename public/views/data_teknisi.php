@@ -46,9 +46,9 @@
                 <?php if (!empty($daftar_teknisi)): ?>
                     <?php foreach ($daftar_teknisi as $teknisi): ?>
                         <tr>
-                            <td><strong><?php echo htmlspecialchars($teknisi['id_teknisi']); ?></strong></td>
-                            <td><?php echo htmlspecialchars($teknisi['nama_teknisi']); ?></td>
-                            <td><?php echo htmlspecialchars($teknisi['kontak']); ?></td>
+                            <td data-label="ID Teknisi "><strong><?php echo htmlspecialchars($teknisi['id_teknisi']); ?></strong></td>
+                            <td data-label="Nama Teknisi "><?php echo htmlspecialchars($teknisi['nama_teknisi']); ?></td>
+                            <td data-label="Kontak"><?php echo htmlspecialchars($teknisi['kontak']); ?></td>
                             <?php if ($_SESSION['role'] === 'admin'): ?>
                             <td class="text-center">
                                 <a href="index.php?page=teknisi_edit&id=<?php echo $teknisi['id_teknisi']; ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>

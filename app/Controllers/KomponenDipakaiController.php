@@ -1,8 +1,7 @@
 <?php
-// app/Controllers/KomponenDipakaiController.php
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
 use PhpOffice\PhpSpreadsheet\Worksheet\Table;
 use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -23,66 +22,101 @@ class KomponenDipakaiController {
     }
 
     public function index() {
-        if (!isset($_SESSION['is_logged_in'])) { header("Location: index.php?page=login"); exit(); }
+        if (!isset($_SESSION['is_logged_in'])) {
+            header("Location: index.php?page=login");
+            exit();
+        }
         $pageTitle = "Laporan Komponen Terpakai";
         $daftar_log_komponen = $this->komponenDipakaiModel->getAllUsedComponents();
         require_once 'views/laporan_komponen_dipakai.php';
     }
 
     public function create() {
-        if (!isset($_SESSION['is_logged_in'])) { header("Location: index.php?page=login"); exit(); }
+        if (!isset($_SESSION['is_logged_in'])) {
+            header("Location: index.php?page=login");
+            exit();
+        }
         $pageTitle = "Input Pemakaian Komponen";
         $daftar_maintenance = $this->maintenanceModel->getAll();
         $daftar_kerusakan = $this->kerusakanModel->getAll();
-        // DIUBAH: Panggil getAll() biar dapet info stok
         $daftar_komponen = $this->komponenModel->getAll(); 
         require_once 'views/form_komponen_dipakai.php';
     }
 
     public function store() {
-        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') { header("Location: index.php?page=dashboard"); exit(); }
-        $log_type = $_POST['log_type']; $log_id = $_POST['log_id'];
-        $data = [ 'id_log_maintenance' => ($log_type === 'maintenance') ? $log_id : null, 'id_log_kerusakan' => ($log_type === 'kerusakan') ? $log_id : null, 'id_komponen' => $_POST['id_komponen'], 'jumlah_dipakai' => $_POST['jumlah_dipakai'] ];
+        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: index.php?page=dashboard");
+            exit();
+        }
+        $log_type = $_POST['log_type'];
+        $log_id = $_POST['log_id'];
+        $data = [
+            'id_log_maintenance' => ($log_type === 'maintenance') ? $log_id : null,
+            'id_log_kerusakan' => ($log_type === 'kerusakan') ? $log_id : null,
+            'id_komponen' => $_POST['id_komponen'],
+            'jumlah_dipakai' => $_POST['jumlah_dipakai']
+        ];
         $result = $this->komponenDipakaiModel->create($data);
         $_SESSION[$result['success'] ? 'success_message' : 'error_message'] = $result['message'];
-        header("Location: index.php?page=laporan_komponen_dipakai"); exit();
+        header("Location: index.php?page=laporan_komponen_dipakai");
+        exit();
     }
 
     public function edit() {
-        if (!isset($_SESSION['is_logged_in'])) { header("Location: index.php?page=login"); exit(); }
+        if (!isset($_SESSION['is_logged_in'])) {
+            header("Location: index.php?page=login");
+            exit();
+        }
         $id = $_GET['id'];
         $log = $this->komponenDipakaiModel->getById($id);
         if (!$log) {
             $_SESSION['error_message'] = "Data tidak ditemukan.";
-            header("Location: index.php?page=laporan_komponen_dipakai"); exit();
+            header("Location: index.php?page=laporan_komponen_dipakai");
+            exit();
         }
         $pageTitle = "Edit Pemakaian Komponen";
         $daftar_maintenance = $this->maintenanceModel->getAll();
         $daftar_kerusakan = $this->kerusakanModel->getAll();
-        // DIUBAH: Panggil getAll() biar dapet info stok
         $daftar_komponen = $this->komponenModel->getAll();
         require_once 'views/form_komponen_dipakai.php';
     }
 
     public function update() {
-        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') { header("Location: index.php?page=dashboard"); exit(); }
+        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: index.php?page=dashboard");
+            exit();
+        }
         $id = $_POST['id'];
-        $log_type = $_POST['log_type']; $log_id = $_POST['log_id'];
-        $data = [ 'id_log_maintenance' => ($log_type === 'maintenance') ? $log_id : null, 'id_log_kerusakan' => ($log_type === 'kerusakan') ? $log_id : null, 'id_komponen' => $_POST['id_komponen'], 'jumlah_dipakai' => $_POST['jumlah_dipakai'] ];
+        $log_type = $_POST['log_type'];
+        $log_id = $_POST['log_id'];
+        $data = [
+            'id_log_maintenance' => ($log_type === 'maintenance') ? $log_id : null,
+            'id_log_kerusakan' => ($log_type === 'kerusakan') ? $log_id : null,
+            'id_komponen' => $_POST['id_komponen'],
+            'jumlah_dipakai' => $_POST['jumlah_dipakai']
+        ];
         $result = $this->komponenDipakaiModel->update($id, $data);
         $_SESSION[$result['success'] ? 'success_message' : 'error_message'] = $result['message'];
-        header("Location: index.php?page=laporan_komponen_dipakai"); exit();
+        header("Location: index.php?page=laporan_komponen_dipakai");
+        exit();
     }
     
     public function delete() {
-        if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin') { header("Location: index.php?page=laporan_komponen_dipakai"); exit(); }
+        if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin') {
+            header("Location: index.php?page=laporan_komponen_dipakai");
+            exit();
+        }
         $id = $_GET['id'];
-        if ($this->komponenDipakaiModel->delete($id)) { $_SESSION['success_message'] = "Log pemakaian komponen berhasil dihapus dan stok telah dikembalikan."; } 
-        else { $_SESSION['error_message'] = "Gagal menghapus log."; }
-        header("Location: index.php?page=laporan_komponen_dipakai"); exit();
+        if ($this->komponenDipakaiModel->delete($id)) {
+            $_SESSION['success_message'] = "Log pemakaian komponen berhasil dihapus dan stok telah dikembalikan.";
+        } else {
+            $_SESSION['error_message'] = "Gagal menghapus log.";
+        }
+        header("Location: index.php?page=laporan_komponen_dipakai");
+        exit();
     }
 
-        public function exportToExcel() {
+    public function exportToExcel() {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         
@@ -91,7 +125,6 @@ class KomponenDipakaiController {
 
         $data = $this->komponenDipakaiModel->getAllUsedComponents();
         
-        // Looping manual (cara aman)
         $rowNumber = 2;
         foreach ($data as $row) {
             $sheet->setCellValue('A' . $rowNumber, $row['id']);
@@ -107,19 +140,16 @@ class KomponenDipakaiController {
             $sheet->setCellValue('K' . $rowNumber, $row['harga_satuan']);
             $sheet->setCellValue('L' . $rowNumber, $row['biaya']);
 
-            // Format kolom harga jadi Rupiah
             $sheet->getStyle('K' . $rowNumber)->getNumberFormat()->setFormatCode('"Rp "#,##0');
             $sheet->getStyle('L' . $rowNumber)->getNumberFormat()->setFormatCode('"Rp "#,##0');
             
             $rowNumber++;
         }
         
-        // Atur lebar kolom otomatis biar rapi
         foreach (range('A', $sheet->getHighestColumn()) as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
-        // --- STYLING PERSIS SEPERTI PREFERENSI LO ---
         $lastColumn = $sheet->getHighestColumn();
         $lastRow = $sheet->getHighestRow();
         $headerStyle = [
@@ -129,12 +159,7 @@ class KomponenDipakaiController {
         $sheet->getStyle('A1:' . $lastColumn . '1')->applyFromArray($headerStyle);
         $firstColumnRange = 'A2:A' . $lastRow;
         $sheet->getStyle($firstColumnRange)->applyFromArray($headerStyle);
-        // --- AKHIR STYLING ---
 
-        // --- AKHIR STYLING ---
-
-
-        // --- FORMAT SEBAGAI TABEL ---
         $tableRange = 'A1:' . $lastColumn . $lastRow;
         $table = new Table($tableRange, 'LaporanKomponenTable');
         $tableStyle = new TableStyle();
@@ -143,9 +168,7 @@ class KomponenDipakaiController {
         $tableStyle->setShowFirstColumn(true);
         $table->setStyle($tableStyle);
         $sheet->addTable($table);
-        // --- AKHIR FORMAT TABEL ---
 
-        // Atur header HTTP untuk download
         $filename = 'laporan-komponen-dipakai-' . date('Y-m-d') . '.xlsx';
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="' . $filename . '"');

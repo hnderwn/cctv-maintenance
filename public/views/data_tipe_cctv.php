@@ -46,10 +46,10 @@
                 <?php if (!empty($daftar_model)): ?>
                     <?php foreach ($daftar_model as $model): ?>
                         <tr class="expandable-row" data-bs-toggle="collapse" data-bs-target="#detail-<?php echo $model['id_model']; ?>">
-                            <td><strong><?php echo htmlspecialchars($model['id_model']); ?></strong></td>
-                            <td><?php echo htmlspecialchars($model['nama_model']); ?></td>
-                            <td><?php echo htmlspecialchars($model['manufaktur']); ?></td>
-                            <td>
+                            <td data-label="ID Model"><strong><?php echo htmlspecialchars($model['id_model']); ?></strong></td>
+                            <td data-label="Nama Model"><?php echo htmlspecialchars($model['nama_model']); ?></td>
+                            <td data-label="Manufaktur"><?php echo htmlspecialchars($model['manufaktur']); ?></td>
+                            <td data-label="Spesifikasi">
                                 <?php
                                     $spec = $model['spesifikasi'];
                                     echo htmlspecialchars(strlen($spec) > 50 ? substr($spec, 0, 50) . '...' : $spec);

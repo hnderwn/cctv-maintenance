@@ -8,13 +8,15 @@
 
     <?php if (isset($_SESSION['success_message'])): ?>
         <div class="alert alert-success alert-dismissible fade show">
-            <?php echo $_SESSION['success_message']; unset($_SESSION['success_message']); ?>
+            <?php echo $_SESSION['success_message'];
+            unset($_SESSION['success_message']); ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     <?php endif; ?>
     <?php if (isset($_SESSION['error_message'])): ?>
         <div class="alert alert-danger alert-dismissible fade show">
-            <?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?>
+            <?php echo $_SESSION['error_message'];
+            unset($_SESSION['error_message']); ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     <?php endif; ?>
@@ -30,10 +32,11 @@
         <table class="table table-custom">
             <thead>
                 <tr>
-                    <th>Tanggal & Jam</th> <th>Lokasi CCTV</th>
+                    <th>Tanggal & Jam</th>
+                    <th>Lokasi CCTV</th>
                     <th>Jenis Laporan</th>
                     <th>Nama Komponen</th>
-                    <th class="text-center">Jumlah</th>
+                    <th>Jumlah</th>
                     <th class="text-center">Aksi</th>
                 </tr>
             </thead>
@@ -41,13 +44,14 @@
                 <?php if (!empty($daftar_log_komponen)): ?>
                     <?php foreach ($daftar_log_komponen as $log): ?>
                         <tr class="expandable-row" data-bs-toggle="collapse" data-bs-target="#detail-komp-<?php echo $log['id']; ?>">
-                            <td><strong><?php echo htmlspecialchars(date('d M Y', strtotime($log['tanggal_laporan']))); ?></strong><br><small class="text-muted"><?php echo htmlspecialchars(date('H:i', strtotime($log['jam_laporan']))); ?> WIB</small></td>
-                            <td><?php echo htmlspecialchars($log['lokasi_cctv']); ?></td>
-                            <td>
-                                <?php $badge = $log['jenis_laporan'] == 'Maintenance' ? 'bg-primary' : 'bg-warning text-dark'; echo '<span class="badge ' . $badge . '">' . htmlspecialchars($log['jenis_laporan']) . '</span>';?>
+                            <td data-label="Tanggal"><strong><?php echo htmlspecialchars(date('d M Y', strtotime($log['tanggal_laporan']))); ?></strong><br><small class="text-muted"><?php echo htmlspecialchars(date('H:i', strtotime($log['jam_laporan']))); ?> WIB</small></td>
+                            <td data-label="Lokasi"><?php echo htmlspecialchars($log['lokasi_cctv']); ?></td>
+                            <td data-label="Laporan">
+                                <?php $badge = $log['jenis_laporan'] == 'Maintenance' ? 'bg-primary' : 'bg-warning text-dark';
+                                echo '<span class="badge ' . $badge . '">' . htmlspecialchars($log['jenis_laporan']) . '</span>'; ?>
                             </td>
-                            <td><?php echo htmlspecialchars($log['nama_komponen']); ?></td>
-                            <td class="text-center"><?php echo htmlspecialchars($log['jumlah_dipakai']); ?></td>
+                            <td data-label="Nama Komponen"><?php echo htmlspecialchars($log['nama_komponen']); ?></td>
+                            <td data-label="Jumlah"><?php echo htmlspecialchars($log['jumlah_dipakai']); ?></td>
                             <td class="text-center">
                                 <a href="index.php?page=komponen_dipakai_edit&id=<?php echo $log['id']; ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>
                                 <a href="index.php?page=komponen_dipakai_delete&id=<?php echo $log['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus log ini? Stok komponen akan dikembalikan.');"><i class="bi bi-trash-fill"></i></a>
@@ -84,7 +88,9 @@
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <tr><td colspan="6" class="text-center text-muted p-5 bg-light">Belum ada data komponen yang dipakai.</td></tr>
+                    <tr>
+                        <td colspan="6" class="text-center text-muted p-5 bg-light">Belum ada data komponen yang dipakai.</td>
+                    </tr>
                 <?php endif; ?>
             </tbody>
         </table>

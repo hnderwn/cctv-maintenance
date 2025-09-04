@@ -1,5 +1,4 @@
 <?php
-// Cek jika user sudah login, langsung tendang ke dashboard.
 if (isset($_SESSION['is_logged_in'])) {
     header("Location: index.php?page=dashboard");
     exit();

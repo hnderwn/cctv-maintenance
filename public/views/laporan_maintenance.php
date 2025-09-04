@@ -15,7 +15,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <a href="index.php?page=maintenance_create" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-2"></i>Tambah Laporan
+            <i class="bi bi-plus-circle me-2"></i>Tambah Laporan Maintenance
         </a>
         <a href="index.php?page=export_maintenance" class="btn btn-success">
             <i class="bi bi-file-earmark-excel-fill me-2"></i>Export ke Excel
@@ -37,12 +37,11 @@
                 <?php if (!empty($daftar_maintenance)): ?>
                     <?php foreach ($daftar_maintenance as $log): ?>
                         <tr class="expandable-row" data-bs-toggle="collapse" data-bs-target="#detail-maint-<?php echo $log['id_log']; ?>">
-                            <td><strong><?php echo htmlspecialchars(date('d M Y', strtotime($log['tanggal']))); ?></strong><br><small class="text-muted"><?php echo htmlspecialchars(date('H:i', strtotime($log['jam']))); ?> WIB</small></td>
-                            <td><?php echo htmlspecialchars($log['cctv_lokasi']); ?></td>
-                            <td><?php echo htmlspecialchars($log['nama_teknisi']); ?></td>
-                            <td>
+                            <td data-label="Tanggal"><strong><?php echo htmlspecialchars(date('d M Y', strtotime($log['tanggal']))); ?></strong><br><small class="text-muted"><?php echo htmlspecialchars(date('H:i', strtotime($log['jam']))); ?> WIB</small></td>
+                            <td data-label="CCTV Lokasi"><?php echo htmlspecialchars($log['cctv_lokasi']); ?></td>
+                            <td data-label="Teknisi"><?php echo htmlspecialchars($log['nama_teknisi']); ?></td>
+                            <td data-label="Deskripsi">
                                 <?php
-                                    // Potong deskripsi jika lebih dari 100 karakter
                                     $desc = $log['deskripsi_log'];
                                     echo htmlspecialchars(strlen($desc) > 100 ? substr($desc, 0, 100) . '...' : $desc);
                                 ?>

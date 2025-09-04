@@ -1,5 +1,4 @@
 <?php
-// app/Models/LogKerusakanModel.php
 
 class LogKerusakanModel {
     private $conn;
@@ -9,14 +8,13 @@ class LogKerusakanModel {
     }
 
     public function getAll() {
-        // QUERY DIPERLENGKAP: tambahkan lk.id_cctv dan lk.id_teknisi
         $sql = "SELECT lk.id_log, lk.tanggal, lk.jam, lk.deskripsi_kerusakan, 
-                       c.lokasi as cctv_lokasi, lk.id_cctv,
-                       t.nama_teknisi, lk.id_teknisi
-                FROM log_kerusakan lk
-                LEFT JOIN cctv c ON lk.id_cctv = c.id_cctv
-                LEFT JOIN teknisi t ON lk.id_teknisi = t.id_teknisi
-                ORDER BY lk.tanggal DESC, lk.jam DESC";
+                         c.lokasi as cctv_lokasi, lk.id_cctv,
+                         t.nama_teknisi, lk.id_teknisi
+                 FROM log_kerusakan lk
+                 LEFT JOIN cctv c ON lk.id_cctv = c.id_cctv
+                 LEFT JOIN teknisi t ON lk.id_teknisi = t.id_teknisi
+                 ORDER BY lk.tanggal DESC, lk.jam DESC";
         $result = mysqli_query($this->conn, $sql);
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }

@@ -5,9 +5,7 @@
     <?php require_once 'partials/navbar.php'; ?>
 
     <?php
-    // Cek apakah ini mode edit atau tambah baru
     $isEdit = isset($log);
-    // Tentukan tipe log yg terpilih jika mode edit
     $selectedLogType = '';
     if ($isEdit) {
         if (!empty($log['id_log_maintenance'])) {
@@ -70,7 +68,6 @@
 
 <?php require_once 'partials/footer.php'; ?>
 <script>
-// Logika JavaScript untuk dropdown dinamis
 document.addEventListener('DOMContentLoaded', function() {
     const logTypeSelect = document.getElementById('log_type');
     const logIdSelect = document.getElementById('log_id');

@@ -1,7 +1,5 @@
 <?php
-// app/Models/CctvTipeModel.php
 
-// Nama class diubah menjadi CctvTipeModel
 class CctvTipeModel {
     private $conn;
 
@@ -10,14 +8,13 @@ class CctvTipeModel {
     }
 
     public function getAll($sortBy = 'nama_model', $sortOrder = 'ASC') {
-        // Whitelist kolom yang diizinkan untuk sorting
         $allowedColumns = ['id_model', 'nama_model', 'manufaktur', 'umur_ekonomis_th'];
         if (!in_array($sortBy, $allowedColumns)) {
-            $sortBy = 'nama_model'; // Default
+            $sortBy = 'nama_model';
         }
 
         if (strtoupper($sortOrder) !== 'ASC' && strtoupper($sortOrder) !== 'DESC') {
-            $sortOrder = 'ASC'; // Default
+            $sortOrder = 'ASC';
         }
 
         $sql = "SELECT id_model, nama_model, manufaktur, spesifikasi, umur_ekonomis_th FROM cctv_models ORDER BY $sortBy $sortOrder";

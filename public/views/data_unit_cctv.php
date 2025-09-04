@@ -47,10 +47,10 @@
                 <?php if (!empty($daftar_cctv)): ?>
                     <?php foreach ($daftar_cctv as $cctv): ?>
                         <tr class="expandable-row" data-bs-toggle="collapse" data-bs-target="#detail-<?php echo str_replace(' ', '-', $cctv['id_cctv']); ?>">
-                            <td><strong><?php echo htmlspecialchars($cctv['id_cctv']); ?></strong></td>
-                            <td><?php echo htmlspecialchars($cctv['lokasi']); ?></td>
-                            <td><?php echo htmlspecialchars($cctv['nama_model']); ?></td>
-                            <td>
+                            <td data-label="ID CCTV"><strong><?php echo htmlspecialchars($cctv['id_cctv']); ?></strong></td>
+                            <td data-label="Lokasi"><?php echo htmlspecialchars($cctv['lokasi']); ?></td>
+                            <td data-label="Nama Model"><?php echo htmlspecialchars($cctv['nama_model']); ?></td>
+                            <td data-label="Status">
                                 <?php 
                                     $status_class = '';
                                     switch ($cctv['status']) {

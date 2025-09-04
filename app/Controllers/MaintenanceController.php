@@ -1,15 +1,14 @@
 <?php
-// app/Controllers/MaintenanceController.php
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Worksheet\Table;
+use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 require_once '../app/Models/LogMaintenanceModel.php';
 require_once '../app/Models/TeknisiModel.php';
 require_once '../app/Models/CctvUnitModel.php'; 
-use PhpOffice\PhpSpreadsheet\Worksheet\Table;     
-use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 class MaintenanceController {
     private $logMaintenanceModel, $teknisiModel, $cctvUnitModel;
@@ -21,24 +20,31 @@ class MaintenanceController {
     }
 
     public function index() {
-        if (!isset($_SESSION['is_logged_in'])) { header("Location: index.php?page=login"); exit(); }
+        if (!isset($_SESSION['is_logged_in'])) {
+            header("Location: index.php?page=login");
+            exit();
+        }
         $pageTitle = "Laporan Maintenance";
         $daftar_maintenance = $this->logMaintenanceModel->getAll();
         require_once 'views/laporan_maintenance.php';
     }
     
-    // FUNGSI BARU: Menampilkan form tambah data
     public function create() {
-        if (!isset($_SESSION['is_logged_in'])) { header("Location: index.php?page=login"); exit(); }
+        if (!isset($_SESSION['is_logged_in'])) {
+            header("Location: index.php?page=login");
+            exit();
+        }
         $pageTitle = "Tambah Laporan Maintenance";
-        // Ambil data untuk dropdown
         $daftar_cctv = $this->cctvUnitModel->getAllForDropdown();
         $daftar_teknisi = $this->teknisiModel->getAll();
         require_once 'views/form_maintenance.php';
     }
 
     public function store() { 
-        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') { header("Location: index.php?page=laporan_maintenance"); exit(); }
+        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: index.php?page=laporan_maintenance");
+            exit();
+        }
         if ($this->logMaintenanceModel->create($_POST)) {
             $_SESSION['success_message'] = "Laporan maintenance berhasil ditambahkan!";
         } else {
@@ -48,9 +54,11 @@ class MaintenanceController {
         exit();
     }
 
-    // FUNGSI BARU: Menampilkan form edit data
     public function edit() {
-        if (!isset($_SESSION['is_logged_in'])) { header("Location: index.php?page=login"); exit(); }
+        if (!isset($_SESSION['is_logged_in'])) {
+            header("Location: index.php?page=login");
+            exit();
+        }
         $id = $_GET['id'];
         $log = $this->logMaintenanceModel->getById($id);
         if (!$log) {
@@ -59,14 +67,16 @@ class MaintenanceController {
             exit();
         }
         $pageTitle = "Edit Laporan Maintenance";
-        // Ambil data untuk dropdown
         $daftar_cctv = $this->cctvUnitModel->getAllForDropdown();
         $daftar_teknisi = $this->teknisiModel->getAll();
         require_once 'views/form_maintenance.php';
     }
 
     public function update() {
-        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') { header("Location: index.php?page=laporan_maintenance"); exit(); }
+        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: index.php?page=laporan_maintenance");
+            exit();
+        }
         $id = $_POST['id_log'];
         if ($this->logMaintenanceModel->update($id, $_POST)) {
             $_SESSION['success_message'] = "Laporan berhasil diperbarui!";
@@ -78,7 +88,13 @@ class MaintenanceController {
     }
 
     public function delete() {
-        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') { header("Location: index.php?page=laporan_maintenance"); exit(); }
+        // PERBAIKAN DI SINI: Hapus pengecekan POST, tambahkan pengecekan role admin
+        if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin') {
+            $_SESSION['error_message'] = "Anda tidak memiliki hak akses untuk aksi ini.";
+            header("Location: index.php?page=laporan_maintenance");
+            exit();
+        }
+
         $id = $_GET['id'];
         if ($this->logMaintenanceModel->delete($id)) {
             $_SESSION['success_message'] = "Laporan berhasil dihapus!";
@@ -93,13 +109,11 @@ class MaintenanceController {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         
-        // Header detail sesuai preferensi lo
         $headers = ['ID Log', 'Tanggal', 'Jam', 'Deskripsi', 'Lokasi CCTV', 'ID CCTV', 'Nama Teknisi', 'ID Teknisi'];
         $sheet->fromArray($headers, NULL, 'A1');
 
         $data = $this->logMaintenanceModel->getAll();
         
-        // Looping manual (cara aman) untuk memasukkan data
         $rowNumber = 2;
         foreach ($data as $row) {
             $sheet->setCellValue('A' . $rowNumber, $row['id_log']);
@@ -113,7 +127,6 @@ class MaintenanceController {
             $rowNumber++;
         }
 
-        // --- STYLING PERSIS SEPERTI PREFERENSI LO ---
         $lastColumn = $sheet->getHighestColumn();
         $lastRow = $sheet->getHighestRow();
 
@@ -131,9 +144,7 @@ class MaintenanceController {
 
         $firstColumnRange = 'A2:A' . $lastRow;
         $sheet->getStyle($firstColumnRange)->applyFromArray($headerStyle);
-        // --- AKHIR STYLING ---
 
-        // --- FORMAT SEBAGAI TABEL ---
         $tableRange = 'A1:' . $lastColumn . $lastRow;
         $table = new Table($tableRange, 'LaporanMaintenanceTable');
         $tableStyle = new TableStyle();
@@ -142,9 +153,7 @@ class MaintenanceController {
         $tableStyle->setShowFirstColumn(true);
         $table->setStyle($tableStyle);
         $sheet->addTable($table);
-        // --- AKHIR FORMAT TABEL ---
 
-        // Atur header HTTP untuk download
         $filename = 'laporan-maintenance-' . date('Y-m-d') . '.xlsx';
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="' . $filename . '"');
@@ -154,6 +163,4 @@ class MaintenanceController {
         $writer->save('php://output');
         exit();
     }
-
-
 }

@@ -62,7 +62,7 @@ a.card-box:hover {
 }
 
 .content-wrapper {
-  margin-top: 1rem;
+  margin-top: var(--navbar-height);
   margin-left: var(--sidebar-width);
   padding: 30px;
   transition: margin-left 0.3s ease;
@@ -209,4 +209,127 @@ body.sidebar-mini .sidebar .nav-link {
 }
 .forgot-password-link:hover {
   text-decoration: underline;
+}
+
+/* .table-custom tbody td:last-child {
+  padding: 0.5rem;
+}
+
+/* Target tombol di dalam sel aksi */
+.table-custom tbody td:last-child > .btn {
+  display: inline-block;
+  padding: 0.15rem, 0.25rem;
+}
+
+.table-custom tbody td:last-child > .btn > i {
+  font-size: 1.2rem;
+}
+
+/*
+====================================================
+=== RESPONSIVE STYLES (HANYA AKTIF DI LAYAR KECIL) ===
+====================================================
+*/
+@media (max-width: 768px) {
+  /* --- Navigasi Mobile --- */
+  .main-navbar {
+    left: 0;
+    padding: 0 15px;
+  }
+  
+  /* Paksa konten agar tidak geser di mobile */
+  .content-wrapper {
+    margin-left: 0 !important;
+    padding: 15px;
+    margin-top: var(--navbar-height); /* Pastikan jarak atas tetap ada */
+  }
+  
+  /* --- Logika show/hide sidebar --- */
+  .sidebar {
+    transform: translateX(-100%);
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    z-index: 9999;
+  }
+  body.sidebar-mobile-open .sidebar {
+    transform: translateX(0);
+  }
+
+  /* Overlay untuk background */
+  .sidebar-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5); z-index: 1031;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  body.sidebar-mobile-open .sidebar-overlay {
+    opacity: 1; visibility: visible;
+  }
+
+  /* --- [BARU] Tata Ulang Tabel Menjadi Kartu Grid 2 Kolom --- */
+  .table-custom thead {
+    display: none;
+  }
+  .table-custom tbody, 
+  .table-custom tr {
+    display: block;
+    width: 100%;
+  }
+  .table-custom tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1rem; /* Jarak antar kolom */
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: .5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .table-custom td {
+    display: flex;
+    flex-direction: column;
+    padding: .5rem 0;
+    border: none;
+    background: transparent !important;
+    grid-column: span 1;
+    text-align: left; /* Teks value jadi rata kiri */
+    padding-left: 0; /* Reset padding-left lama */
+  }
+  .table-custom td::before {
+    content: attr(data-label);
+    position: static; /* Hapus positioning absolut */
+    font-weight: bold;
+    color: #6c757d;
+    margin-bottom: .25rem;
+    font-size: .8rem;
+    text-transform: uppercase;
+  }
+  
+  /* Kolom pertama jadi header kartu */
+  .table-custom td:first-child {
+    grid-column: 1 / -1; /* Lebar penuh */
+    margin-bottom: .5rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid #e9ecef;
+  }
+  .table-custom td:first-child strong {
+      font-size: 1.1rem;
+      color: var(--primary-blue);
+  }
+  .table-custom td:first-child::before {
+      display: none; /* Sembunyikan label duplikat (misal: "ID CCTV") */
+  }
+  
+  /* Kolom terakhir (Aksi) jadi footer kartu */
+  .table-custom td:last-child {
+    grid-column: 1 / -1; /* Lebar penuh */
+    margin-top: .5rem;
+    padding-top: .5rem;
+    border-top: 1px solid #e9ecef;
+    flex-direction: row;
+    justify-content: flex-end; /* Tombol jadi di kanan */
+    gap: .5rem;
+  }
+  .table-custom td:last-child::before {
+      display: none; /* Sembunyikan label "Aksi" */
+  }
 }

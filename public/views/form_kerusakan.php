@@ -6,7 +6,6 @@
     <?php require_once 'partials/navbar.php'; ?>
 
     <?php
-    // Cek apakah ini mode edit atau tambah baru
     $isEdit = isset($log);
     ?>
 

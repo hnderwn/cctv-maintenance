@@ -37,9 +37,9 @@
                 <?php if (!empty($daftar_user)): ?>
                     <?php foreach ($daftar_user as $user): ?>
                         <tr>
-                            <td><strong><?php echo htmlspecialchars($user['nama_lengkap']); ?></strong></td>
-                            <td><?php echo htmlspecialchars($user['username']); ?></td>
-                            <td><span class="badge bg-info text-dark"><?php echo htmlspecialchars(ucfirst($user['role'])); ?></span></td>
+                            <td data-label="Nama Lengkap"><strong><?php echo htmlspecialchars($user['nama_lengkap']); ?></strong></td>
+                            <td data-label="Username"><?php echo htmlspecialchars($user['username']); ?></td>
+                            <td data-label="Role"><span class="badge bg-info text-dark"><?php echo htmlspecialchars(ucfirst($user['role'])); ?></span></td>
                             <td class="text-center">
                                 <a href="index.php?page=user_edit&id=<?php echo $user['id_user']; ?>" class="btn btn-sm btn-warning" title="Edit User">
                                     <i class="bi bi-pencil-square"></i>

@@ -43,10 +43,10 @@
                 <?php if (!empty($daftar_kerusakan)): ?>
                     <?php foreach ($daftar_kerusakan as $log): ?>
                         <tr class="expandable-row" data-bs-toggle="collapse" data-bs-target="#detail-kerusakan-<?php echo $log['id_log']; ?>">
-                            <td><strong><?php echo htmlspecialchars(date('d M Y', strtotime($log['tanggal']))); ?></strong><br><small class="text-muted"><?php echo htmlspecialchars(date('H:i', strtotime($log['jam']))); ?> WIB</small></td>
-                            <td><?php echo htmlspecialchars($log['cctv_lokasi']); ?></td>
-                            <td><?php echo !empty($log['nama_teknisi']) ? htmlspecialchars($log['nama_teknisi']) : '<span class="badge bg-secondary">Belum Ditugaskan</span>'; ?></td>
-                            <td>
+                            <td data-label="Tanggal"><strong><?php echo htmlspecialchars(date('d M Y', strtotime($log['tanggal']))); ?></strong><br><small class="text-muted"><?php echo htmlspecialchars(date('H:i', strtotime($log['jam']))); ?> WIB</small></td>
+                            <td data-label="CCTV Lokasi"><?php echo htmlspecialchars($log['cctv_lokasi']); ?></td>
+                            <td data-label="Nama Teknisi"><?php echo !empty($log['nama_teknisi']) ? htmlspecialchars($log['nama_teknisi']) : '<span class="badge bg-secondary">Belum Ditugaskan</span>'; ?></td>
+                            <td data-label="Deskripsi">
                                 <?php
                                     $desc = $log['deskripsi_kerusakan'];
                                     echo htmlspecialchars(strlen($desc) > 100 ? substr($desc, 0, 100) . '...' : $desc);

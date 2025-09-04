@@ -1,5 +1,4 @@
 <?php
-// app/Models/CctvUnitModel.php
 
 class CctvUnitModel {
     private $conn;
@@ -8,11 +7,6 @@ class CctvUnitModel {
         $this->conn = $dbConnection;
     }
     
-    // FUNGSI BARU YANG KEMARIN LUPA DITAMBAHKAN
-    /**
-     * Mengambil semua data unit CCTV untuk dropdown (hanya ID dan lokasi).
-     * @return array
-     */
     public function getAllForDropdown() {
         $sql = "SELECT id_cctv, lokasi FROM cctv ORDER BY lokasi ASC";
         $result = mysqli_query($this->conn, $sql);
@@ -20,9 +14,7 @@ class CctvUnitModel {
     }
 
     public function getAll($sortBy = 'lokasi', $sortOrder = 'ASC') {
-        // Whitelist kolom yang diizinkan untuk sorting
         $allowedColumns = ['c.id_cctv', 'c.lokasi', 'c.status', 'cm.nama_model'];
-        // Ganti nama kolom dari view ke nama asli di query
         $sortColumnMap = [
             'id_cctv' => 'c.id_cctv',
             'lokasi' => 'c.lokasi',
@@ -37,15 +29,14 @@ class CctvUnitModel {
         }
 
         $sql = "SELECT c.id_cctv, c.lokasi, c.status, c.keterangan, c.id_model, 
-                       cm.nama_model, cm.manufaktur, cm.spesifikasi
-                FROM cctv c
-                JOIN cctv_models cm ON c.id_model = cm.id_model
-                ORDER BY $dbSortColumn $sortOrder";
+                         cm.nama_model, cm.manufaktur, cm.spesifikasi
+                 FROM cctv c
+                 JOIN cctv_models cm ON c.id_model = cm.id_model
+                 ORDER BY $dbSortColumn $sortOrder";
         
         $result = mysqli_query($this->conn, $sql);
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
-
 
     public function getById($id) {
         $sql = "SELECT id_cctv, lokasi, status, id_model, keterangan FROM cctv WHERE id_cctv = ?";

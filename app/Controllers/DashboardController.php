@@ -1,7 +1,5 @@
 <?php
-// app/Controllers/DashboardController.php
 
-// Panggil model baru
 require_once '../app/Models/DashboardModel.php';
 
 class DashboardController {
@@ -19,12 +17,10 @@ class DashboardController {
         
         $pageTitle = "Dashboard";
 
-        // Ambil data statistik dari model
         $stats['cctv_aktif'] = $this->dashboardModel->countActiveCctv();
         $stats['cctv_bermasalah'] = $this->dashboardModel->countProblemCctv();
         $stats['total_teknisi'] = $this->dashboardModel->countTotalTeknisi();
 
-        // Kirim data ke view
         require_once 'views/dashboard.php';
     }
 }

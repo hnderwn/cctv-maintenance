@@ -1,6 +1,6 @@
 <header class="main-navbar">
     <div class="navbar-left">
-        <button class="btn me-2" type="button" id="sidebar-toggle-btn">
+        <button class="btn me-2 d-block" type="button" id="sidebar-toggle-btn">
             <i class="bi bi-list"></i>
         </button>
         
@@ -21,7 +21,9 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                 <li><a class="dropdown-item" href="#">Profil (Soon)</a></li>
-                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
                 <li><a class="dropdown-item text-danger" href="index.php?page=logout">Logout</a></li>
             </ul>
         </div>

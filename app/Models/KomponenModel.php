@@ -1,5 +1,4 @@
 <?php
-// app/Models/KomponenModel.php
 
 class KomponenModel {
     private $conn;
@@ -8,29 +7,20 @@ class KomponenModel {
         $this->conn = $dbConnection;
     }
 
-    /**
-     * Mengambil semua data komponen untuk dropdown.
-     * @return array
-     */
     public function getAllForDropdown() {
         $sql = "SELECT id_komponen, nama_komponen FROM komponen ORDER BY nama_komponen ASC";
         $result = mysqli_query($this->conn, $sql);
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    /**
-     * Mengambil semua data komponen untuk tabel laporan.
-     * @return array
-     */
     public function getAll($sortBy = 'nama_komponen', $sortOrder = 'ASC') {
-        // Whitelist kolom yang diizinkan untuk sorting
         $allowedColumns = ['id_komponen', 'nama_komponen', 'satuan', 'stok', 'harga_satuan'];
         if (!in_array($sortBy, $allowedColumns)) {
-            $sortBy = 'nama_komponen'; // Default
+            $sortBy = 'nama_komponen';
         }
 
         if (strtoupper($sortOrder) !== 'ASC' && strtoupper($sortOrder) !== 'DESC') {
-            $sortOrder = 'ASC'; // Default
+            $sortOrder = 'ASC';
         }
 
         $sql = "SELECT id_komponen, nama_komponen, satuan, stok, harga_satuan FROM komponen ORDER BY $sortBy $sortOrder";
@@ -38,11 +28,6 @@ class KomponenModel {
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    /**
-     * Mengambil satu data komponen berdasarkan ID.
-     * @param string $id
-     * @return array|null
-     */
     public function getById($id) {
         $sql = "SELECT id_komponen, nama_komponen, satuan, stok, harga_satuan FROM komponen WHERE id_komponen = ?";
         $stmt = mysqli_prepare($this->conn, $sql);
@@ -52,11 +37,6 @@ class KomponenModel {
         return mysqli_fetch_assoc($result);
     }
 
-    /**
-     * Membuat data komponen baru.
-     * @param array $data
-     * @return bool
-     */
     public function create($data) {
         $sql = "INSERT INTO komponen (id_komponen, nama_komponen, satuan, stok, harga_satuan) VALUES (?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($this->conn, $sql);
@@ -70,12 +50,6 @@ class KomponenModel {
         return mysqli_stmt_execute($stmt);
     }
 
-    /**
-     * Memperbarui data komponen.
-     * @param string $id
-     * @param array $data
-     * @return bool
-     */
     public function update($id, $data) {
         $sql = "UPDATE komponen SET nama_komponen = ?, satuan = ?, stok = ?, harga_satuan = ? WHERE id_komponen = ?";
         $stmt = mysqli_prepare($this->conn, $sql);
@@ -89,11 +63,6 @@ class KomponenModel {
         return mysqli_stmt_execute($stmt);
     }
 
-    /**
-     * Menghapus data komponen.
-     * @param string $id
-     * @return bool
-     */
     public function delete($id) {
         $sql = "DELETE FROM komponen WHERE id_komponen = ?";
         $stmt = mysqli_prepare($this->conn, $sql);

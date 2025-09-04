@@ -1,7 +1,5 @@
 <?php
-// app/Controllers/AuthController.php
 
-// Panggil Model yang dibutuhkan
 require_once '../app/Models/UserModel.php';
 
 class AuthController {

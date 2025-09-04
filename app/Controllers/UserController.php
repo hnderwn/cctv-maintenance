@@ -1,5 +1,4 @@
 <?php
-// app/Controllers/UserController.php
 
 require_once '../app/Models/UserModel.php';
 
@@ -8,7 +7,6 @@ class UserController {
 
     public function __construct($dbConnection) {
         $this->userModel = new UserModel($dbConnection);
-        // Pastikan hanya admin yang bisa mengakses controller ini
         if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin') {
             $_SESSION['error_message'] = "Anda tidak memiliki hak akses untuk halaman ini.";
             header("Location: index.php?page=dashboard");
@@ -73,12 +71,11 @@ class UserController {
         
         $id = $_POST['id_user'];
         $data = [
-            'username'     => $_POST['username'],
-            'nama_lengkap' => $_POST['nama_lengkap'],
-            'role'         => $_POST['role'],
+            'username'      => $_POST['username'],
+            'nama_lengkap'  => $_POST['nama_lengkap'],
+            'role'          => $_POST['role'],
         ];
 
-        // Cek jika admin memasukkan password baru
         if (!empty($_POST['password'])) {
             $data['password_hash'] = password_hash($_POST['password'], PASSWORD_BCRYPT);
         }
@@ -95,7 +92,6 @@ class UserController {
 
     public function delete() {
         $id = $_GET['id'];
-        // Mencegah admin menghapus dirinya sendiri
         if ($id == $_SESSION['id_user']) {
             $_SESSION['error_message'] = "Anda tidak bisa menghapus akun Anda sendiri!";
             header("Location: index.php?page=user");
@@ -112,9 +108,8 @@ class UserController {
         exit();
     }
 
-        public function resetPassword() {
+    public function resetPassword() {
         $id = $_GET['id'];
-        // Mencegah admin mereset passwordnya sendiri lewat cara ini
         if ($id == $_SESSION['id_user']) {
             $_SESSION['error_message'] = "Anda tidak bisa mereset password Anda sendiri dari sini!";
             header("Location: index.php?page=user");

@@ -5,8 +5,7 @@
     <?php require_once 'partials/navbar.php'; ?>
 
     <?php
-    // Tentukan apakah ini form untuk 'edit' atau 'create'
-    $isEdit = isset($cctv); // Variabel $cctv dikirim dari controller jika mode edit
+    $isEdit = isset($cctv); 
     ?>
 
     <h1 class="h3 mb-4 text-gray-800"><?php echo htmlspecialchars($pageTitle); ?></h1>
@@ -15,7 +14,6 @@
         <div class="card-body">
             <form action="index.php?page=<?php echo $isEdit ? 'cctv_unit_update' : 'cctv_unit_store'; ?>" method="POST">
                 
-                <!-- Jika mode edit, ID tidak bisa diubah -->
                 <div class="mb-3">
                     <label for="id_cctv" class="form-label">ID Unit CCTV</label>
                     <input type="text" class="form-control" id="id_cctv" name="id_cctv" value="<?php echo $isEdit ? htmlspecialchars($cctv['id_cctv']) : ''; ?>" <?php echo $isEdit ? 'readonly' : 'required'; ?>>

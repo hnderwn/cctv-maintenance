@@ -1,5 +1,4 @@
 <?php
-// app/Controllers/KomponenController.php
 
 require_once '../app/Models/KomponenModel.php';
 
@@ -10,31 +9,21 @@ class KomponenController {
         $this->komponenModel = new KomponenModel($dbConnection);
     }
 
-    /**
-     * Menampilkan halaman laporan utama Data Komponen.
-     */
     public function index() {
         if (!isset($_SESSION['is_logged_in'])) {
             header("Location: index.php?page=login");
             exit();
         }
         
-        // Ambil parameter sorting dari URL
         $sortBy = isset($_GET['sort']) ? $_GET['sort'] : 'nama_komponen';
         $sortOrder = isset($_GET['order']) ? $_GET['order'] : 'ASC';
         
         $pageTitle = "Data Komponen";
-        // Ambil data dari Model dengan parameter sorting
         $daftar_komponen = $this->komponenModel->getAll($sortBy, $sortOrder);
         
-        // Kirim variabel sorting ke view
         require_once 'views/data_komponen.php';
     }
 
-
-    /**
-     * Menampilkan form untuk menambah komponen baru.
-     */
     public function create() {
         if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin') {
             $_SESSION['error_message'] = "Anda tidak memiliki hak akses.";
@@ -46,9 +35,6 @@ class KomponenController {
         require_once 'views/form_komponen.php';
     }
 
-    /**
-     * Menyimpan data komponen baru.
-     */
     public function store() {
         if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin' || $_SERVER['REQUEST_METHOD'] !== 'POST') {
             header("Location: index.php?page=komponen");
@@ -73,9 +59,6 @@ class KomponenController {
         exit();
     }
     
-    /**
-     * Menampilkan form untuk mengedit komponen.
-     */
     public function edit() {
         if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin') {
             $_SESSION['error_message'] = "Anda tidak memiliki hak akses.";
@@ -96,9 +79,6 @@ class KomponenController {
         require_once 'views/form_komponen.php';
     }
 
-    /**
-     * Memperbarui data komponen.
-     */
     public function update() {
         if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin' || $_SERVER['REQUEST_METHOD'] !== 'POST') {
             header("Location: index.php?page=komponen");
@@ -123,9 +103,6 @@ class KomponenController {
         exit();
     }
 
-    /**
-     * Menghapus data komponen.
-     */
     public function delete() {
         if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin') {
             $_SESSION['error_message'] = "Anda tidak memiliki hak akses.";

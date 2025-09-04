@@ -1,5 +1,4 @@
 <?php
-// app/Models/LogMaintenanceModel.php
 
 class LogMaintenanceModel {
     private $conn;
@@ -9,14 +8,13 @@ class LogMaintenanceModel {
     }
 
     public function getAll() {
-        // QUERY DIPERLENGKAP: tambahkan lm.id_cctv dan lm.id_teknisi
         $sql = "SELECT lm.id_log, lm.tanggal, lm.jam, lm.deskripsi_log, 
-                       c.lokasi as cctv_lokasi, lm.id_cctv, 
-                       t.nama_teknisi, lm.id_teknisi
-                FROM log_maintenance lm
-                JOIN cctv c ON lm.id_cctv = c.id_cctv
-                JOIN teknisi t ON lm.id_teknisi = t.id_teknisi
-                ORDER BY lm.tanggal DESC, lm.jam DESC";
+                         c.lokasi as cctv_lokasi, lm.id_cctv, 
+                         t.nama_teknisi, lm.id_teknisi
+                 FROM log_maintenance lm
+                 JOIN cctv c ON lm.id_cctv = c.id_cctv
+                 JOIN teknisi t ON lm.id_teknisi = t.id_teknisi
+                 ORDER BY lm.tanggal DESC, lm.jam DESC";
         $result = mysqli_query($this->conn, $sql);
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
@@ -49,7 +47,6 @@ class LogMaintenanceModel {
     }
 
     public function delete($id) {
-        // Hapus juga komponen yang terhubung dengan log ini
         $sql_komponen = "DELETE FROM log_komponen_dipakai WHERE id_log_maintenance = ?";
         $stmt_komponen = mysqli_prepare($this->conn, $sql_komponen);
         mysqli_stmt_bind_param($stmt_komponen, "i", $id);

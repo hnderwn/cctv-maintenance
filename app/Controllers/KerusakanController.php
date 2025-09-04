@@ -1,15 +1,14 @@
 <?php
-// app/Controllers/KerusakanController.php
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Worksheet\Table;
+use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 require_once '../app/Models/LogKerusakanModel.php';
 require_once '../app/Models/TeknisiModel.php';
 require_once '../app/Models/CctvUnitModel.php';
-use PhpOffice\PhpSpreadsheet\Worksheet\Table;
-use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 class KerusakanController {
     private $logKerusakanModel, $teknisiModel, $cctvUnitModel;
@@ -21,15 +20,20 @@ class KerusakanController {
     }
     
     public function index() {
-        if (!isset($_SESSION['is_logged_in'])) { header("Location: index.php?page=login"); exit(); }
+        if (!isset($_SESSION['is_logged_in'])) {
+            header("Location: index.php?page=login");
+            exit();
+        }
         $pageTitle = "Laporan Kerusakan";
         $daftar_kerusakan = $this->logKerusakanModel->getAll();
         require_once 'views/laporan_kerusakan.php';
     }
 
-    // FUNGSI BARU: Menampilkan form tambah data
     public function create() {
-        if (!isset($_SESSION['is_logged_in'])) { header("Location: index.php?page=login"); exit(); }
+        if (!isset($_SESSION['is_logged_in'])) {
+            header("Location: index.php?page=login");
+            exit();
+        }
         $pageTitle = "Tambah Laporan Kerusakan";
         $daftar_cctv = $this->cctvUnitModel->getAllForDropdown();
         $daftar_teknisi = $this->teknisiModel->getAll();
@@ -37,7 +41,10 @@ class KerusakanController {
     }
 
     public function store() {
-        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') { header("Location: index.php?page=laporan_kerusakan"); exit(); }
+        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: index.php?page=laporan_kerusakan");
+            exit();
+        }
         if ($this->logKerusakanModel->create($_POST)) {
             $_SESSION['success_message'] = "Laporan kerusakan berhasil ditambahkan!";
         } else {
@@ -47,9 +54,11 @@ class KerusakanController {
         exit();
     }
     
-    // FUNGSI BARU: Menampilkan form edit data
     public function edit() {
-        if (!isset($_SESSION['is_logged_in'])) { header("Location: index.php?page=login"); exit(); }
+        if (!isset($_SESSION['is_logged_in'])) {
+            header("Location: index.php?page=login");
+            exit();
+        }
         $id = $_GET['id'];
         $log = $this->logKerusakanModel->getById($id);
         if (!$log) {
@@ -64,7 +73,10 @@ class KerusakanController {
     }
 
     public function update() {
-        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') { header("Location: index.php?page=laporan_kerusakan"); exit(); }
+        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: index.php?page=laporan_kerusakan");
+            exit();
+        }
         $id = $_POST['id_log'];
         if ($this->logKerusakanModel->update($id, $_POST)) {
             $_SESSION['success_message'] = "Laporan berhasil diperbarui!";
@@ -76,7 +88,13 @@ class KerusakanController {
     }
 
     public function delete() {
-        if (!isset($_SESSION['is_logged_in']) || $_SERVER['REQUEST_METHOD'] !== 'POST') { header("Location: index.php?page=laporan_kerusakan"); exit(); }
+        // PERBAIKAN DI SINI: Hapus pengecekan POST, tambahkan pengecekan role admin
+        if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin') {
+            $_SESSION['error_message'] = "Anda tidak memiliki hak akses untuk aksi ini.";
+            header("Location: index.php?page=laporan_kerusakan");
+            exit();
+        }
+
         $id = $_GET['id'];
         if ($this->logKerusakanModel->delete($id)) {
             $_SESSION['success_message'] = "Laporan berhasil dihapus!";
@@ -87,7 +105,7 @@ class KerusakanController {
         exit();
     }
 
-        public function exportToExcel() {
+    public function exportToExcel() {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         
@@ -96,7 +114,6 @@ class KerusakanController {
 
         $data = $this->logKerusakanModel->getAll();
         
-        // Looping manual (cara aman)
         $rowNumber = 2;
         foreach ($data as $row) {
             $sheet->setCellValue('A' . $rowNumber, $row['id_log']);
@@ -110,7 +127,6 @@ class KerusakanController {
             $rowNumber++;
         }
 
-        // --- STYLING SESUAI PREFERENSI LO ---
         $lastColumn = $sheet->getHighestColumn();
         $lastRow = $sheet->getHighestRow();
 
@@ -128,9 +144,7 @@ class KerusakanController {
 
         $firstColumnRange = 'A2:A' . $lastRow;
         $sheet->getStyle($firstColumnRange)->applyFromArray($headerStyle);
-        // --- AKHIR STYLING ---
 
-        // --- FORMAT SEBAGAI TABEL ---
         $tableRange = 'A1:' . $lastColumn . $lastRow;
         $table = new Table($tableRange, 'LaporanKerusakanTable');
         $tableStyle = new TableStyle();
@@ -139,9 +153,7 @@ class KerusakanController {
         $tableStyle->setShowFirstColumn(true);
         $table->setStyle($tableStyle);
         $sheet->addTable($table);
-        // --- AKHIR FORMAT TABEL ---
 
-        // Atur header HTTP untuk download
         $filename = 'laporan-kerusakan-' . date('Y-m-d') . '.xlsx';
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="' . $filename . '"');
