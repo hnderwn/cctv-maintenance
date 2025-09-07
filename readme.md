@@ -2,6 +2,9 @@
 
 Aplikasi web sederhana yang dibangun untuk mengelola dan memantau sistem pemeliharaan CCTV. Aplikasi ini membantu dalam melacak inventaris CCTV, mengelola teknisi, mencatat jadwal pemeliharaan, dan menangani laporan kerusakan.
 
+#Demo:
+https://hamptonparkcctv.infinityfreeapp.com/
+
 ## Fitur Utama
 
 Aplikasi ini dilengkapi dengan berbagai fitur untuk memudahkan manajemen sistem CCTV:
