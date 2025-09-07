@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Atur base path sesuai dengan subdirektori proyek Anda
+    RewriteBase /Pemrograman%20Web%20Lanjut/cctv-maintenance/
+
+    # Aturan ini akan mengarahkan semua permintaan ke index.php
+    # kecuali jika permintaan tersebut adalah untuk file atau direktori yang benar-benar ada
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?page=$1 [L,QSA]
+</IfModule>
+
+DirectoryIndex index.php

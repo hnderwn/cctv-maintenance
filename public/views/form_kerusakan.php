@@ -3,7 +3,7 @@
 
 
 <main class="content-wrapper">
-    <?php require_once 'partials/navbar.php'; ?>
+    <?php require_once 'public/views/partials/navbar.php'; ?>
 
     <?php
     $isEdit = isset($log);

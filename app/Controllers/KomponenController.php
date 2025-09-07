@@ -1,6 +1,6 @@
 <?php
 
-require_once '../app/Models/KomponenModel.php';
+require_once 'app/Models/KomponenModel.php';
 
 class KomponenController {
     private $komponenModel;
@@ -21,7 +21,7 @@ class KomponenController {
         $pageTitle = "Data Komponen";
         $daftar_komponen = $this->komponenModel->getAll($sortBy, $sortOrder);
         
-        require_once 'views/data_komponen.php';
+        require_once 'public/views/data_komponen.php';
     }
 
     public function create() {
@@ -32,7 +32,7 @@ class KomponenController {
         }
 
         $pageTitle = "Tambah Komponen Baru";
-        require_once 'views/form_komponen.php';
+        require_once 'public/views/form_komponen.php';
     }
 
     public function store() {
@@ -76,7 +76,7 @@ class KomponenController {
         }
 
         $pageTitle = "Edit Data Komponen";
-        require_once 'views/form_komponen.php';
+        require_once 'public/views/form_komponen.php';
     }
 
     public function update() {

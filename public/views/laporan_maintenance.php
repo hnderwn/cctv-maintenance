@@ -2,7 +2,7 @@
 <?php require_once 'partials/sidebar.php'; ?>
 
 <main class="content-wrapper">
-    <?php require_once 'partials/navbar.php'; ?>
+    <?php require_once 'public/views/partials/navbar.php'; ?>
 
     <h1 class="h3 mb-4 text-gray-800"><?php echo htmlspecialchars($pageTitle); ?></h1>
 

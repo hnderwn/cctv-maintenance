@@ -1,6 +1,6 @@
 <?php
 
-require_once '../app/Models/UserModel.php';
+require_once 'app/Models/UserModel.php';
 
 class UserController {
     private $userModel;
@@ -17,12 +17,12 @@ class UserController {
     public function index() {
         $pageTitle = "Manajemen User";
         $daftar_user = $this->userModel->getAll();
-        require_once 'views/laporan_user.php';
+        require_once 'public/views/laporan_user.php';
     }
 
     public function create() {
         $pageTitle = "Tambah User Baru";
-        require_once 'views/form_user.php';
+        require_once 'public/views/form_user.php';
     }
 
     public function store() {
@@ -60,7 +60,7 @@ class UserController {
         }
 
         $pageTitle = "Edit User";
-        require_once 'views/form_user.php';
+        require_once 'public/views/form_user.php';
     }
 
     public function update() {

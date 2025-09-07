@@ -1,6 +1,6 @@
 <?php
 
-require_once '../app/Models/CctvTipeModel.php';
+require_once 'app/Models/CctvTipeModel.php';
 
 class CctvTipeController {
     private $tipeModel;
@@ -26,7 +26,7 @@ class CctvTipeController {
         $daftar_model = $this->tipeModel->getAll($sortBy, $sortOrder);
 
         $pageTitle = "Data Tipe CCTV";
-        require_once 'views/data_tipe_cctv.php';
+        require_once 'public/views/data_tipe_cctv.php';
     }
 
     public function create() {
@@ -36,7 +36,7 @@ class CctvTipeController {
             exit();
         }
         $pageTitle = "Tambah Tipe CCTV Baru";
-        require_once 'views/form_tipe_cctv.php';
+        require_once 'public/views/form_tipe_cctv.php';
     }
 
     public function store() {
@@ -74,7 +74,7 @@ class CctvTipeController {
             exit();
         }
         $pageTitle = "Edit Tipe CCTV";
-        require_once 'views/form_tipe_cctv.php';
+        require_once 'public/views/form_tipe_cctv.php';
     }
 
     public function update() {

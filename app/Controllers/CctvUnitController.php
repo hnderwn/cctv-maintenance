@@ -1,7 +1,7 @@
 <?php
 
-require_once '../app/Models/CctvUnitModel.php';
-require_once '../app/Models/CctvTipeModel.php';
+require_once 'app/Models/CctvUnitModel.php';
+require_once 'app/Models/CctvTipeModel.php';
 
 class CctvUnitController {
     private $unitModel;
@@ -21,14 +21,14 @@ class CctvUnitController {
         $pageTitle = "Data Unit CCTV";
         $daftar_cctv = $this->unitModel->getAll($sortBy, $sortOrder);
 
-        require_once 'views/data_unit_cctv.php';
+        require_once 'public/views/data_unit_cctv.php';
     }
 
     public function create() {
         if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin') { $_SESSION['error_message'] = "Anda tidak memiliki hak akses."; header("Location: index.php?page=cctv_unit"); exit(); }
         $pageTitle = "Tambah Unit CCTV Baru";
         $daftar_model = $this->tipeModel->getAll();
-        require_once 'views/form_unit_cctv.php';
+        require_once 'public/views/form_unit_cctv.php';
     }
     
     public function store() {
@@ -42,7 +42,7 @@ class CctvUnitController {
         $id = $_GET['id']; $cctv = $this->unitModel->getById($id);
         if (!$cctv) { $_SESSION['error_message'] = "Data CCTV tidak ditemukan."; header("Location: index.php?page=cctv_unit"); exit(); }
         $pageTitle = "Edit Unit CCTV"; $daftar_model = $this->tipeModel->getAll();
-        require_once 'views/form_unit_cctv.php';
+        require_once 'public/views/form_unit_cctv.php';
     }
     public function update() {
         if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin' || $_SERVER['REQUEST_METHOD'] !== 'POST') { header("Location: index.php?page=cctv_unit"); exit(); }

@@ -64,4 +64,4 @@
     </div>
 </main>
 
-<?php require_once 'partials/footer.php'; ?>
+<?php require_once 'public/views/partials/footer.php'; ?>

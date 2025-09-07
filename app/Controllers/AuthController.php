@@ -1,32 +1,36 @@
 <?php
+require_once 'app/Models/UserModel.php';
 
-require_once '../app/Models/UserModel.php';
 
-class AuthController {
+class AuthController
+{
     private $userModel;
 
-    public function __construct($dbConnection) {
+    public function __construct($dbConnection)
+    {
         $this->userModel = new UserModel($dbConnection);
     }
 
     /**
      * Menampilkan halaman/view untuk login.
      */
-    public function login() {
+    public function login()
+    {
         // Jika user sudah login, langsung tendang ke dashboard
         if (isset($_SESSION['is_logged_in'])) {
             header("Location: index.php?page=dashboard");
             exit();
         }
-        
+
         // Panggil file view untuk menampilkan form login
-        require_once 'views/login.php';
+        require_once 'public/views/login.php';
     }
 
     /**
      * Memproses data yang dikirim dari form login.
      */
-    public function prosesLogin() {
+    public function prosesLogin()
+    {
         // Pastikan request adalah POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header("Location: index.php?page=login");
@@ -47,7 +51,7 @@ class AuthController {
             $_SESSION['username'] = $user['username'];
             $_SESSION['nama_lengkap'] = $user['nama_lengkap'];
             $_SESSION['role'] = $user['role'];
-            
+
             // Arahkan ke dashboard
             header("Location: index.php?page=dashboard");
             exit();
@@ -62,7 +66,8 @@ class AuthController {
     /**
      * Menghapus sesi dan me-logout user.
      */
-    public function logout() {
+    public function logout()
+    {
         session_unset();
         session_destroy();
         header("Location: index.php?page=login");

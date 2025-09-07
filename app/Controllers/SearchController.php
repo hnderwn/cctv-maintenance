@@ -1,6 +1,6 @@
 <?php
 
-require_once '../app/Models/SearchModel.php';
+require_once 'app/Models/SearchModel.php';
 
 class SearchController {
     private $searchModel;
@@ -19,6 +19,6 @@ class SearchController {
         
         $pageTitle = "Hasil Pencarian untuk '" . htmlspecialchars($query) . "'";
         
-        require_once 'views/hasil_pencarian.php';
+        require_once 'public/views/hasil_pencarian.php';
     }
 }

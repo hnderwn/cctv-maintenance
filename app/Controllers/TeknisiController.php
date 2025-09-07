@@ -1,6 +1,6 @@
 <?php
 
-require_once '../app/Models/TeknisiModel.php';
+require_once 'app/Models/TeknisiModel.php';
 
 class TeknisiController {
     private $teknisiModel;
@@ -22,7 +22,7 @@ class TeknisiController {
 
         $pageTitle = "Laporan Data Teknisi";
         
-        require_once 'views/data_teknisi.php';
+        require_once 'public/views/data_teknisi.php';
     }
 
     public function create() {
@@ -33,7 +33,7 @@ class TeknisiController {
         }
 
         $pageTitle = "Tambah Teknisi Baru";
-        require_once 'views/form_teknisi.php';
+        require_once 'public/views/form_teknisi.php';
     }
 
     public function store() {
@@ -74,7 +74,7 @@ class TeknisiController {
         }
 
         $pageTitle = "Edit Data Teknisi";
-        require_once 'views/form_teknisi.php';
+        require_once 'public/views/form_teknisi.php';
     }
 
     public function update() {

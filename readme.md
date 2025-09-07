@@ -1,109 +1,81 @@
-Dokumentasi Proyek: Sistem Manajemen Maintenance CCTV
+# Aplikasi Manajemen Pemeliharaan CCTV
 
-Versi: 1.0 (Fase Fungsional)
-Tanggal Terakhir Update: 25 Juni 2025
+Aplikasi web sederhana yang dibangun untuk mengelola dan memantau sistem pemeliharaan CCTV. Aplikasi ini membantu dalam melacak inventaris CCTV, mengelola teknisi, mencatat jadwal pemeliharaan, dan menangani laporan kerusakan.
 
-1. Deskripsi Proyek
+## Fitur Utama
 
-Aplikasi ini adalah sistem manajemen berbasis web yang berfungsi sebagai alat bantu untuk mencatat, melacak, dan mengelola semua aset CCTV serta seluruh aktivitas perawatannya. Tujuannya adalah untuk memusatkan data, mempermudah pelacakan riwayat perbaikan, dan menyediakan laporan aktivitas yang terstruktur.
+Aplikasi ini dilengkapi dengan berbagai fitur untuk memudahkan manajemen sistem CCTV:
 
-2. Arsitektur & Teknologi
+### 1. Dashboard Interaktif
+- **Ringkasan Statistik:** Menampilkan data kunci secara visual, seperti:
+  - Jumlah CCTV Aktif
+  - Jumlah CCTV Bermasalah (dalam perbaikan, perawatan, atau rusak)
+  - Total Teknisi Terdaftar
+- **Akses Cepat:** Menyediakan tautan langsung ke fungsi-fungsi yang paling sering digunakan seperti input maintenance, lapor kerusakan, dan penambahan data baru.
 
-Untuk memastikan kode yang bersih, terstruktur, dan mudah dikelola, aplikasi ini mengadopsi pola arsitektur MVC-like (Model-View-Controller).
+### 2. Manajemen Data Master (CRUD)
+- **Manajemen Teknisi:** Menambah, melihat, mengedit, dan menghapus data teknisi.
+- **Manajemen Unit CCTV:** Mengelola semua unit CCTV yang terpasang, termasuk statusnya (Aktif, Perbaikan, Perawatan, Rusak).
+- **Manajemen Tipe CCTV:** Mengelola berbagai tipe atau model CCTV yang digunakan.
+- **Manajemen Komponen:** Mengelola daftar komponen atau suku cadang yang tersedia untuk perbaikan dan pemeliharaan.
+- **Manajemen Pengguna:** Mengelola akun pengguna yang dapat mengakses aplikasi.
 
-    Stack Teknologi:
+### 3. Pencatatan Aktivitas & Laporan
+- **Jadwal Maintenance:** Mencatat dan melihat riwayat kegiatan pemeliharaan yang dilakukan oleh teknisi.
+- **Laporan Kerusakan:** Mencatat laporan kerusakan dari setiap unit CCTV untuk tindak lanjut.
+- **Penggunaan Komponen:** Melacak komponen apa saja yang digunakan selama perbaikan atau pemeliharaan.
+- **Riwayat Laporan:** Melihat histori laporan kerusakan, maintenance, dan penggunaan komponen.
 
-        Bahasa: PHP (Native)
+### 4. Pencarian
+- Fitur pencarian global untuk menemukan data dengan cepat di seluruh aplikasi.
 
-        Database: MySQL / MariaDB
+### 5. Ekspor Data
+- Kemampuan untuk mengekspor data (seperti laporan) ke format spreadsheet (Excel) untuk keperluan analisis atau arsip. *(Fitur ini didukung oleh library `phpoffice/phpspreadsheet`)*.
 
-        Tampilan (Front-end): HTML, Bootstrap 5, Bootstrap Icons, JavaScript (untuk interaktivitas)
+## Struktur Proyek
 
-    Pola Arsitektur:
+Proyek ini dibangun menggunakan PHP native dengan pendekatan arsitektur yang mirip dengan Model-View-Controller (MVC):
 
-        Model (/app/Models): Bertindak sebagai lapisan akses data (mirip Pola Repository atau DAO). Setiap kelas Model bertanggung jawab penuh atas semua interaksi (query SELECT, INSERT, UPDATE, DELETE) ke satu tabel spesifik di database.
+- `app/Controllers/`: Berisi semua logika bisnis dan alur aplikasi.
+- `app/Models/`: Bertanggung jawab untuk semua interaksi dengan database (query, pengambilan, dan penyimpanan data).
+- `public/views/`: Berisi semua file antarmuka pengguna (tampilan HTML) yang dirender ke browser.
+- `config/`: Tempat untuk file konfigurasi, seperti koneksi database.
+- `index.php`: File entri utama yang menangani semua permintaan.
 
-        View (/public/views): Bertanggung jawab murni untuk presentasi atau tampilan (UI). Isinya hanya HTML dan kode PHP sederhana untuk menampilkan data yang sudah disiapkan oleh Controller.
+## Teknologi yang Digunakan
 
-        Controller (/app/Controllers): Bertindak sebagai "otak" aplikasi. Controller menerima permintaan dari user, berkomunikasi dengan Model untuk mengambil atau memanipulasi data, dan kemudian memilih View mana yang akan ditampilkan kepada user.
+- **Backend:** PHP
+- **Database:** MySQL / MariaDB
+- **Frontend:** HTML, CSS, JavaScript
+- **Framework/Library:**
+  - [Bootstrap](https://getbootstrap.com/) untuk styling komponen UI.
+  - [Bootstrap Icons](https://icons.getbootstrap.com/) untuk ikon.
+  - [PhpSpreadsheet](https://phpspreadsheet.readthedocs.io/) untuk fungsionalitas ekspor ke Excel.
 
-        Router (/public/index.php): Semua permintaan dari browser masuk melalui satu pintu gerbang (Front Controller). Router ini yang bertugas memetakan URL ke Controller dan method yang sesuai.
+## Panduan Instalasi
 
-3. Struktur Folder Proyek
+Untuk menjalankan aplikasi ini di lingkungan lokal, ikuti langkah-langkah berikut:
 
-cctv-maintenance/
-├── app/
-│ ├── Controllers/ // Berisi semua file Controller (logika aplikasi)
-│ └── Models/ // Berisi semua file Model (interaksi database)
-│
-├── config/
-│ └── database.php // Konfigurasi koneksi database
-│
-└── public/ // Folder yang dapat diakses publik dari browser
-├── assets/ // Untuk file CSS, JavaScript, dan gambar
-├── views/ // Berisi semua file tampilan (UI)
-└── index.php // Router / Pintu Gerbang Utama Aplikasi
+1.  **Clone Repository**
+    ```bash
+    git clone <URL_REPOSITORY_ANDA>
+    cd cctv-maintenance
+    ```
 
-REKAP PROGRES PROYEK
+2.  **Setup Database**
+    - Buat database baru di MySQL/MariaDB dengan nama `db_cctv_maintenance`.
+    - Impor file SQL (jika tersedia) atau buat tabel-tabel yang diperlukan sesuai dengan struktur yang ada di `app/Models/`.
 
-A. Apa yang TELAH Diselesaikan (Fitur yang Sudah Berfungsi)
+3.  **Konfigurasi Koneksi**
+    - Buka file `config/database.php`.
+    - Sesuaikan konstanta `DB_HOST`, `DB_USER`, `DB_PASS`, dan `DB_NAME` dengan konfigurasi database lokal Anda.
+    ```php
+    define('DB_HOST', 'localhost');
+    define('DB_USER', 'root');
+    define('DB_PASS', ''); // Sesuaikan jika Anda menggunakan password
+    define('DB_NAME', 'db_cctv_maintenance');
+    ```
 
-    ✅ Fondasi & Arsitektur: Proyek berhasil direstrukturisasi ke dalam pola MVC-like.
-
-    ✅ Keamanan Dasar:
-
-        Implementasi password_hash() dan password_verify() untuk manajemen password yang aman.
-
-        Implementasi Prepared Statements pada semua query SQL untuk mencegah SQL Injection.
-
-    ✅ Manajemen User (CRUD): Fungsionalitas penuh bagi admin untuk menambah, melihat, mengedit (termasuk reset password), dan menghapus data user.
-
-    ✅ Manajemen Data Master (CRUD): Fungsionalitas penuh bagi admin untuk mengelola:
-
-        Data Teknisi
-
-        Data Tipe/Model CCTV
-
-        Data Unit CCTV
-
-        Data Komponen & Stok
-
-    ✅ Fitur Laporan Aktivitas:
-
-        Modul Laporan Maintenance dengan fitur Tambah & Edit via pop-up modal.
-
-        Modul Laporan Kerusakan dengan fitur Tambah & Edit via pop-up modal.
-
-    ✅ Desain Antarmuka (UI): Tampilan aplikasi konsisten di seluruh halaman dengan tema biru-putih, sidebar navigasi, dan tabel data yang rapi.
-
-B. Apa yang AKAN Dilakukan (Rencana Pengembangan Selanjutnya)
-
-Ini adalah daftar tugas yang telah kita sepakati untuk menyempurnakan aplikasi.
-
-    1. Rombak Total Fitur Pemakaian Komponen:
-
-        [ ] Hapus fitur input komponen dari modal "Tambah Laporan Maintenance".
-
-        [ ] Buat modul baru "Input Pemakaian Komponen" dengan halaman form terpisah.
-
-        [ ] Form harus memungkinkan user memilih Laporan Maintenance atau Laporan Kerusakan sebagai referensi.
-
-        [ ] Implementasikan Transaksi Database di backend untuk:
-
-            Menyimpan data pemakaian ke log_komponen_dipakai sambil menghitung total biaya.
-
-            Otomatis mengurangi stok di tabel komponen.
-
-        [ ] Tampilkan notifikasi sukses yang informatif (termasuk sisa stok terbaru).
-
-        [ ] Tambahkan kartu "Input Pemakaian Komponen" di Dashboard.
-
-    2. Standarisasi & Upgrade Tampilan Tabel:
-
-        [ ] Audit semua tabel di halaman Data Master untuk memastikan semua kolom dari database (misal: Spesifikasi, Umur Ekonomis, dll) sudah ditampilkan.
-
-        [ ] Tambahkan kolom "Aksi" pada semua halaman Laporan (laporan_maintenance, laporan_kerusakan, dll).
-
-        [ ] Implementasikan tombol "Detail" pada kolom Aksi yang akan memunculkan pop-up modal berisi ringkasan laporan dan daftar komponen yang digunakan.
-
-        [ ] Aktifkan fungsionalitas tombol "Edit" dan "Hapus" untuk semua jenis data laporan.
+4.  **Jalankan Aplikasi**
+    - Tempatkan direktori proyek di dalam folder `htdocs` pada server lokal Anda (misalnya XAMPP, WAMP).
+    - Buka browser dan akses aplikasi melalui URL seperti `http://localhost/cctv-maintenance`.

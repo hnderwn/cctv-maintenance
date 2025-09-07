@@ -6,10 +6,10 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Table;
 use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
-require_once '../app/Models/LogKomponenDipakaiModel.php';
-require_once '../app/Models/LogMaintenanceModel.php';
-require_once '../app/Models/LogKerusakanModel.php';
-require_once '../app/Models/KomponenModel.php';
+require_once 'app/Models/LogKomponenDipakaiModel.php';
+require_once 'app/Models/LogMaintenanceModel.php';
+require_once 'app/Models/LogKerusakanModel.php';
+require_once 'app/Models/KomponenModel.php';
 
 class KomponenDipakaiController {
     private $komponenDipakaiModel, $maintenanceModel, $kerusakanModel, $komponenModel;
@@ -28,7 +28,7 @@ class KomponenDipakaiController {
         }
         $pageTitle = "Laporan Komponen Terpakai";
         $daftar_log_komponen = $this->komponenDipakaiModel->getAllUsedComponents();
-        require_once 'views/laporan_komponen_dipakai.php';
+        require_once 'public/views/laporan_komponen_dipakai.php';
     }
 
     public function create() {
@@ -40,7 +40,7 @@ class KomponenDipakaiController {
         $daftar_maintenance = $this->maintenanceModel->getAll();
         $daftar_kerusakan = $this->kerusakanModel->getAll();
         $daftar_komponen = $this->komponenModel->getAll(); 
-        require_once 'views/form_komponen_dipakai.php';
+        require_once 'public/views/form_komponen_dipakai.php';
     }
 
     public function store() {
@@ -78,7 +78,7 @@ class KomponenDipakaiController {
         $daftar_maintenance = $this->maintenanceModel->getAll();
         $daftar_kerusakan = $this->kerusakanModel->getAll();
         $daftar_komponen = $this->komponenModel->getAll();
-        require_once 'views/form_komponen_dipakai.php';
+        require_once 'public/views/form_komponen_dipakai.php';
     }
 
     public function update() {

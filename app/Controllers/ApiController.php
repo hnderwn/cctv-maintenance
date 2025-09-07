@@ -1,8 +1,8 @@
 <?php
 
-require_once '../app/Models/LogKomponenDipakaiModel.php';
-require_once '../app/Models/LogMaintenanceModel.php';
-require_once '../app/Models/LogKerusakanModel.php';
+require_once 'app/Models/LogKomponenDipakaiModel.php';
+require_once 'app/Models/LogMaintenanceModel.php';
+require_once 'app/Models/LogKerusakanModel.php';
 
 class ApiController {
     private $conn;

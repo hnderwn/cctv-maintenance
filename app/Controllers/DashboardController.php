@@ -1,6 +1,6 @@
 <?php
 
-require_once '../app/Models/DashboardModel.php';
+require_once 'app/Models/DashboardModel.php';
 
 class DashboardController {
     private $dashboardModel;
@@ -21,6 +21,6 @@ class DashboardController {
         $stats['cctv_bermasalah'] = $this->dashboardModel->countProblemCctv();
         $stats['total_teknisi'] = $this->dashboardModel->countTotalTeknisi();
 
-        require_once 'views/dashboard.php';
+        require_once 'public/views/dashboard.php';
     }
 }

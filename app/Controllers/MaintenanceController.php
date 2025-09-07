@@ -6,9 +6,9 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Table;
 use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
-require_once '../app/Models/LogMaintenanceModel.php';
-require_once '../app/Models/TeknisiModel.php';
-require_once '../app/Models/CctvUnitModel.php'; 
+require_once 'app/Models/LogMaintenanceModel.php';
+require_once 'app/Models/TeknisiModel.php';
+require_once 'app/Models/CctvUnitModel.php'; 
 
 class MaintenanceController {
     private $logMaintenanceModel, $teknisiModel, $cctvUnitModel;
@@ -26,7 +26,7 @@ class MaintenanceController {
         }
         $pageTitle = "Laporan Maintenance";
         $daftar_maintenance = $this->logMaintenanceModel->getAll();
-        require_once 'views/laporan_maintenance.php';
+        require_once 'public/views/laporan_maintenance.php';
     }
     
     public function create() {
@@ -37,7 +37,7 @@ class MaintenanceController {
         $pageTitle = "Tambah Laporan Maintenance";
         $daftar_cctv = $this->cctvUnitModel->getAllForDropdown();
         $daftar_teknisi = $this->teknisiModel->getAll();
-        require_once 'views/form_maintenance.php';
+        require_once 'public/views/form_maintenance.php';
     }
 
     public function store() { 
@@ -69,7 +69,7 @@ class MaintenanceController {
         $pageTitle = "Edit Laporan Maintenance";
         $daftar_cctv = $this->cctvUnitModel->getAllForDropdown();
         $daftar_teknisi = $this->teknisiModel->getAll();
-        require_once 'views/form_maintenance.php';
+        require_once 'public/views/form_maintenance.php';
     }
 
     public function update() {
